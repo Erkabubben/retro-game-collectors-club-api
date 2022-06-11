@@ -6,7 +6,7 @@
  * @version 1.0.0
  */
 
-import { Image } from '../../models/resource-service.js'
+import { SellingAd } from '../../models/resource-service.js'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
 
@@ -25,7 +25,7 @@ export class ImagesController {
   async loadImage (req, res, next, id) {
     try {
       // Get the image.
-      const image = await Image.findById(id)
+      const image = await SellingAd.findById(id)
 
       // If no image found send a 404 (Not Found).
       if (!image) {
@@ -102,7 +102,7 @@ export class ImagesController {
    */
   async findAll (req, res, next) {
     try {
-      const images = await Image.find({ owner: req.user.email })
+      const images = await SellingAd.find({ owner: req.user.email })
       const imageObjects = []
       images.forEach(image => {
         imageObjects.push(this.ObjectFromImageModel(image))
@@ -152,7 +152,7 @@ export class ImagesController {
 
       const responseJSON = await response.json()
 
-      const image = new Image({
+      const image = new SellingAd({
         imageUrl: responseJSON.imageUrl,
         _id: responseJSON.id,
         owner: req.user.email,
@@ -230,7 +230,7 @@ export class ImagesController {
       await req.image.delete()
 
       // Create a new image based on the form contents
-      const newImage = new Image({
+      const newImage = new SellingAd({
         imageUrl: imageUrl,
         _id: id,
         owner: req.user.email
