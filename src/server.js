@@ -17,7 +17,8 @@ import { connectDB } from './config/mongoose.js'
  */
 const main = async () => {
   // Checks that database is functional (no use starting the application otherwise).
-  //await connectDB()
+  console.log(process.env.DB_CONNECTION_STRING)
+  await connectDB()
 
   // Creates an Express application.
   const app = express()

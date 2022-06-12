@@ -7,13 +7,13 @@
  */
 
 import express from 'express'
-import { router as imagesRouter } from './images-router.js'
+import { router as gamesRouter } from './games-router.js'
 
 export const router = express.Router()
 
 // Map HTTP verbs and route paths to controller actions.
 router.get('/', (req, res) => res.json({ message: 'Welcome to the Resource Service!' }))
-router.use('/images', imagesRouter)
+router.use('/games', gamesRouter)
 
 router.get('/auth-welcome', (req, res) => res.redirect('http://localhost:8081/api/'))
 router.post('/login', (req, res) => res.redirect(307, 'http://localhost:8081/api/login'))

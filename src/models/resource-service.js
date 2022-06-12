@@ -9,20 +9,20 @@
 import mongoose from 'mongoose'
 
 // Create a schema for the Image documents.
-const sellingAdSchema = new mongoose.Schema({
+const gameSchema = new mongoose.Schema({
   gameTitle: {
     type: String,
     required: '`{PATH}` is required!',
     trim: true,
     maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
-    minLength: [4, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+    minLength: [1, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
   },
   console: {
     type: String,
     required: '`{PATH}` is required!',
     trim: true,
     maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
-    minLength: [4, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+    minLength: [1, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
   },
   condition: {
     type: Number,
@@ -63,4 +63,4 @@ const sellingAdSchema = new mongoose.Schema({
 })
 
 // Create a model using the schema.
-export const SellingAd = mongoose.model('SellingAd', sellingAdSchema)
+export const Game = mongoose.model('Game', gameSchema)

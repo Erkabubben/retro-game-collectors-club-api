@@ -7,7 +7,7 @@
  */
 
 import express from 'express'
-import { ImagesController } from '../../../controllers/api/images-controller.js'
+import { GamesController } from '../../../controllers/api/games-controller.js'
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
@@ -65,7 +65,7 @@ const ensureUserIsResourceOwner = (req, res, next) => {
   }
 }
 
-const controller = new ImagesController()
+const controller = new GamesController()
 
 // Map HTTP verbs and route paths to controller actions.
 

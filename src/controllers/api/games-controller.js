@@ -6,14 +6,14 @@
  * @version 1.0.0
  */
 
-import { SellingAd } from '../../models/resource-service.js'
+import { Game } from '../../models/resource-service.js'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
 
 /**
  * Encapsulates a controller.
  */
-export class ImagesController {
+export class GamesController {
   /**
    * Provide req.image to the route if :id is present.
    *
@@ -25,7 +25,7 @@ export class ImagesController {
   async loadImage (req, res, next, id) {
     try {
       // Get the image.
-      const image = await SellingAd.findById(id)
+      const image = await Game.findById(id)
 
       // If no image found send a 404 (Not Found).
       if (!image) {
@@ -46,17 +46,19 @@ export class ImagesController {
   /**
    * Takes an Image Mongoose model and returns a regular object.
    *
-   * @param {Image} image - An Image Mongoose model.
+   * @param {Game} game - An Image Mongoose model.
    * @returns {object} - A regular object.
    */
-  ObjectFromImageModel (image) {
+  ObjectFromGameModel (game) {
     return {
-      imageUrl: image.imageUrl,
-      id: image._id,
-      updatedAt: image.updatedAt,
-      createdAt: image.createdAt,
-      description: image.description,
-      location: image.location
+      gameTitle: game.gameTitle,
+      console: game.console,
+      condition: game.condition,
+      imageUrl: game.imageUrl,
+      city: game.city,
+      price: game.price,
+      description: game.description,
+      owner: game.owner
     }
   }
 
@@ -102,10 +104,10 @@ export class ImagesController {
    */
   async findAll (req, res, next) {
     try {
-      const images = await SellingAd.find({ owner: req.user.email })
+      const images = await Game.find({ owner: req.user.email })
       const imageObjects = []
       images.forEach(image => {
-        imageObjects.push(this.ObjectFromImageModel(image))
+        imageObjects.push(this.ObjectFromGameModel(image))
       })
       res.json(imageObjects)
     } catch (error) {
@@ -122,7 +124,7 @@ export class ImagesController {
    */
   async find (req, res, next) {
     try {
-      res.json(this.ObjectFromImageModel(req.image))
+      res.json(this.ObjectFromGameModel(req.image))
     } catch (error) {
       next(error)
     }
@@ -139,7 +141,7 @@ export class ImagesController {
   async create (req, res, next) {
     try {
       // Make POST request to Image Service
-      const body = {
+      /*const body = {
         data: req.body.data,
         contentType: req.body.contentType
       }
@@ -151,22 +153,33 @@ export class ImagesController {
       }
 
       const responseJSON = await response.json()
-
-      const image = new SellingAd({
+      const image = new Game({{
         imageUrl: responseJSON.imageUrl,
         _id: responseJSON.id,
         owner: req.user.email,
         description: req.body.description,
         location: req.body.location
       })
+      */
 
-      const responseImage = this.ObjectFromImageModel(image)
+      const game = new Game({
+          gameTitle: req.body.gameTitle,
+          console: req.body.console,
+          condition: req.body.condition,
+          imageUrl: req.body.imageUrl,
+          city: req.body.city,
+          price: req.body.price,
+          description: req.body.description,
+          owner: req.user.email
+        })
 
-      await image.save()
+      const responseGame = this.ObjectFromGameModel(game)
+
+      await game.save()
 
       res
         .status(200)
-        .json(responseImage)
+        .json(responseGame)
     } catch (error) {
       next(error)
     }
@@ -230,7 +243,7 @@ export class ImagesController {
       await req.image.delete()
 
       // Create a new image based on the form contents
-      const newImage = new SellingAd({
+      const newImage = new Game({
         imageUrl: imageUrl,
         _id: id,
         owner: req.user.email
