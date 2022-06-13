@@ -6,7 +6,7 @@
  * @version 1.0.0
  */
 
-import { Game } from '../../models/resource-service.js'
+import { Game } from '../../models/games-service.js'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
 
@@ -63,38 +63,6 @@ export class GamesController {
   }
 
   /**
-   * Makes a Fetch request to the Image Service.
-   *
-   * @param {string} method - The HTTP verb to be used.
-   * @param {string} url - Relative path to be concatenated to the end of the Image Service base URL.
-   * @param {object} body - An object to be included as the body of the request (optional).
-   * @returns {Response} - The response to the Fetch request.
-   */
-  async ImageServiceFetchRequest (method, url, body) {
-    if (body === null) {
-      const response = await fetch(process.env.IMAGE_SERVICE_URL + url, {
-        method: method,
-        headers: {
-          'PRIVATE-TOKEN': process.env.IMAGE_SERVICE_TOKEN,
-          'Content-Type': 'application/json'
-        }
-      })
-      return response
-    } else {
-      const bodyJSON = JSON.stringify(body)
-      const response = await fetch(process.env.IMAGE_SERVICE_URL + url, {
-        method: method,
-        headers: {
-          'PRIVATE-TOKEN': process.env.IMAGE_SERVICE_TOKEN,
-          'Content-Type': 'application/json'
-        },
-        body: bodyJSON
-      })
-      return response
-    }
-  }
-
-  /**
    * Finds the metadata of all the images belonging to the user, and returns it as an
    * array in a JSON response.
    *
@@ -140,28 +108,6 @@ export class GamesController {
    */
   async create (req, res, next) {
     try {
-      // Make POST request to Image Service
-      /*const body = {
-        data: req.body.data,
-        contentType: req.body.contentType
-      }
-
-      const response = await this.ImageServiceFetchRequest('post', 'images', body)
-
-      if (response.status !== 201) {
-        throw Error
-      }
-
-      const responseJSON = await response.json()
-      const image = new Game({{
-        imageUrl: responseJSON.imageUrl,
-        _id: responseJSON.id,
-        owner: req.user.email,
-        description: req.body.description,
-        location: req.body.location
-      })
-      */
-
       const game = new Game({
           gameTitle: req.body.gameTitle,
           console: req.body.console,
@@ -224,18 +170,6 @@ export class GamesController {
    */
   async update (req, res, next) {
     try {
-      // Make PUT request to Image Service
-      const body = {
-        data: req.body.data,
-        contentType: req.body.contentType
-      }
-
-      const response = await this.ImageServiceFetchRequest('put', 'images/' + req.image._id, body)
-
-      if (response.status !== 204) {
-        throw Error
-      }
-
       const id = req.image._id
       const imageUrl = req.image.imageUrl
 

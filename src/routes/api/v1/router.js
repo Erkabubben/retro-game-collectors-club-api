@@ -12,7 +12,15 @@ import { router as gamesRouter } from './games-router.js'
 export const router = express.Router()
 
 // Map HTTP verbs and route paths to controller actions.
-router.get('/', (req, res) => res.json({ message: 'Welcome to the Resource Service!' }))
+router.get('/', (req, res) => res.json({
+    message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate.',
+    links: req.linksUtil.getLinks(req, {
+        test: 'test',
+        login: 'login',
+        register: 'register'
+    })
+}))
+
 router.use('/games', gamesRouter)
 
 router.get('/auth-welcome', (req, res) => res.redirect('http://localhost:8081/api/'))
