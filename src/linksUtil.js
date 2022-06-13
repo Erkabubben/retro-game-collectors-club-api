@@ -25,20 +25,18 @@ import express from 'express'
       index: ''
     }
     for (const [key, value] of Object.entries(localLinks)) {
-      console.log(`${key}: ${value}`)
       linksObject[key] = {}
       linksObject[key]['href'] = fullUrl + value
     }
     for (const [key, value] of Object.entries(globalLinks)) {
-      console.log(`${key}: ${value}`)
       linksObject[key] = {}
       linksObject[key]['href'] = fullUrl + value
     }
-    /*for (const [key, value] of Object.entries(linksObject)) {
-      if (key['href'].length > 0 && key['href'].charAt(key['href'].length - 1) === '/') {
-        linksObject[key]['href'].length--;
+    for (const [key, value] of Object.entries(linksObject)) {
+      if (linksObject[key]['href'].length > 0 && linksObject[key]['href'].charAt(linksObject[key]['href'].length - 1) === '/') {
+        linksObject[key]['href'] = linksObject[key]['href'].substring(0, linksObject[key]['href'].length - 1);
       }
-    }*/
+    }
     return linksObject
   }
 }
