@@ -25,6 +25,10 @@ import jwt from 'jsonwebtoken'
     const globalLinks = {
       index: ''
     }
+    if (!req.hasOwnProperty('user')) {
+      globalLinks.login = 'login'
+      globalLinks.register = 'register'
+    }
     // Add local links.
     for (const [key, value] of Object.entries(localLinks)) {
       linksObject[key] = {}

@@ -6,7 +6,7 @@
  * @version 1.0.0
  */
 
-import { Game } from '../../models/games-service.js'
+import { Game, User } from '../../models/games-service.js'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
 
@@ -33,16 +33,74 @@ export class APIController {
     } else {
       res.json({
           message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently not logged in.)',
-          links: req.linksUtil.getLinks(req, {
-              login: 'login',
-              register: 'register'
-          })
+          links: req.linksUtil.getLinks(req, {})
       })
     }
     next()
   }
 
   async register (req, res, next) {
-    res.redirect(307, 'http://localhost:8081/api/register')
+    const users = await User.find({ email: req.body.email })
+    if (users.length > 0) {
+      res.status(409)
+      res.json({
+        message: 'A user account is already registered on the provided Email address.',
+        status: 409,
+        links: req.linksUtil.getLinks(req, {})
+      })
+      return
+    }
+    if (req.body.password.length < 10 || req.body.password.length > 1000) {
+      res.status(400)
+      res.json({
+        message: 'The password length needs to be at least 10 and no more than 1000 characters.',
+        status: 400,
+        links: req.linksUtil.getLinks(req, {})
+      })
+      return
+    }
+    var user = null
+    try {
+      user = new User({
+        email: req.body.email,
+        //username: req.body.username,
+        //city: req.body.city
+        //imageUrl: req.body.imageUrl,
+        //profileInfo: req.body.profileInfo
+      })
+    } catch (error) {
+      next(error)
+      return
+    }
+    try {
+      await user.save()
+    } catch (error) {
+      next(error)
+      return
+    }
+    try {
+      const bodyJSON = JSON.stringify({
+        email: req.body.email,
+        password: req.body.password
+      })
+      const response = await fetch('http://localhost:8081/api/register', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: bodyJSON
+      })
+      const responseJSON = await response.json()
+      console.log(responseJSON)
+      if (responseJSON.status === 200 || responseJSON.status === 201) {
+        console.log('NEW USER ADDED')
+        res.json(responseJSON)
+        res.status(responseJSON.status)
+      }
+    } catch (error) {
+      await user.delete()
+      next(error)
+      return
+    }
   }
 }

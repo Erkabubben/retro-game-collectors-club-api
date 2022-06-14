@@ -13,7 +13,7 @@ import fetch from 'node-fetch'
 /**
  * Encapsulates a controller.
  */
-export class GamesController {
+export class UsersController {
   /**
    * Provide req.image to the route if :id is present.
    *
@@ -72,18 +72,12 @@ export class GamesController {
    */
   async findAll (req, res, next) {
     try {
-      const games = await Game.find({ owner: req.user.email })
-      const gameObjects = []
-      games.forEach(image => {
-        gameObjects.push(this.ObjectFromGameModel(image))
+      const images = await Game.find({ owner: req.user.email })
+      const imageObjects = []
+      images.forEach(image => {
+        imageObjects.push(this.ObjectFromGameModel(image))
       })
-      res.status(200)
-      res.json({
-        message: 'The password length needs to be at least 10 and no more than 1000 characters.',
-        status: 200,
-        links: req.linksUtil.getLinks(req, {}),
-        resources: gameObjects
-      })
+      res.json(imageObjects)
     } catch (error) {
       next(error)
     }
@@ -129,13 +123,9 @@ export class GamesController {
 
       await game.save()
 
-      res.status(201)
-      res.json({
-        message: 'A new game ad was posted.',
-        status: 201,
-        links: req.linksUtil.getLinks(req, {}),
-        resource: responseGame
-      })
+      res
+        .status(200)
+        .json(responseGame)
     } catch (error) {
       next(error)
     }

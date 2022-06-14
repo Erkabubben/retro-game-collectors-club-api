@@ -50,15 +50,16 @@ const main = async () => {
   app.use(function (err, req, res, next) {
     err.status = err.status || 500
 
-    if (req.app.get('env') !== 'development') {
+    //if (req.app.get('env') !== 'development') {
       res
         .status(err.status)
         .json({
           status: err.status,
-          message: err.message
+          message: err.message,
+          links: req.linksUtil.getLinks(req, {})
         })
       return
-    }
+    //}
 
     // Development only!
     // Only providing detailed error in development.

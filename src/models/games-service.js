@@ -64,3 +64,46 @@ const gameSchema = new mongoose.Schema({
 
 // Create a model using the schema.
 export const Game = mongoose.model('Game', gameSchema)
+
+// Create a schema for the User documents.
+const userSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: 'VALIDATION ERROR: `{PATH}` is required!',
+    trim: true,
+    unique: true,
+    maxlength: [100, 'VALIDATION ERROR: `{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
+    minlength: [4, 'VALIDATION ERROR: `{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+  },
+  username: {
+    type: String,
+    //required: '`{PATH}` is required!',
+    trim: true,
+    //unique: [true, '`{PATH}` is not unique!'],
+    maxLength: [100, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
+    minLength: [3, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+  },
+  city: {
+    type: String,
+    //required: '`{PATH}` is required!',
+    trim: true,
+    maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
+    minLength: [1, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+  },
+  profileBody: {
+    type: String,
+    trim: true,
+    maxLength: [2000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAX}).'],
+  },
+  imageUrl: {
+    type: String,
+    trim: true,
+    maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.']
+  }
+}, {
+  timestamps: true,
+  versionKey: false
+})
+
+// Create a model using the schema.
+export const User = mongoose.model('User', userSchema)
