@@ -35,6 +35,7 @@ import dashify from 'dashify'
       globalLinks.gamesPostedByUser = 'games/{user}'
       globalLinks.currentlyPostedGames = 'games'
       globalLinks.currentlyPostedGamesForConsole = 'games/{console}'
+      globalLinks.webhooks = 'webhooks'
     }
     // Add local links.
     for (const [key, value] of Object.entries(localLinks)) {
