@@ -56,7 +56,7 @@ const authenticateJWT = (req, res, next) => {
  */
 const ensureUserIsResourceOwner = (req, res, next) => {
   try {
-    if (req.user.email !== req.image.owner) {
+    if (req.user.email !== req.game.owner) {
       throw Error
     }
     next()

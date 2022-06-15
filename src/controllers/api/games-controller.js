@@ -70,7 +70,7 @@ export class GamesController {
    * @param {Game} game - A Game Mongoose model.
    * @returns {object} - A regular object.
    */
-  ObjectFromGameModel (game) {
+  ObjectFromGameModel (req, game) {
     return {
       gameTitle: game.gameTitle,
       console: game.console,
@@ -79,7 +79,8 @@ export class GamesController {
       city: game.city,
       price: game.price,
       description: game.description,
-      owner: game.owner
+      owner: game.owner,
+      href: req.protocol + '://' + process.env.APP_URI + '/api/games/' + game.resourceId
     }
   }
 
@@ -96,7 +97,7 @@ export class GamesController {
       const games = await Game.find({ owner: req.user.email })
       const gameObjects = []
       games.forEach(image => {
-        gameObjects.push(this.ObjectFromGameModel(image))
+        gameObjects.push(this.ObjectFromGameModel(req, image))
       })
       const message = gameObjects.length > 0 ? 'You have a total of ' + gameObjects.length + ' game ads posted.' : 'You currently have no game ads posted.'
       res.status(200)
@@ -112,7 +113,7 @@ export class GamesController {
   }
 
   /**
-   * Finds the metadata of all the images belonging to the user, and returns it as an
+   * Finds the metadata of all the games for a certain console, and returns it as an
    * array in a JSON response.
    *
    * @param {object} req - Express request object.
@@ -123,8 +124,8 @@ export class GamesController {
       try {
         const games = await Game.find({ console: req.console })
         const gameObjects = []
-        games.forEach(image => {
-          gameObjects.push(this.ObjectFromGameModel(image))
+        games.forEach(game => {
+          gameObjects.push(this.ObjectFromGameModel(req, game))
         })
         const message = gameObjects.length > 0
           ? `There are a total of ${gameObjects.length} game ads for the ${req.console} posted.`
@@ -148,25 +149,14 @@ export class GamesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async find (req, res, next) {
-    try {
-      res.json(this.ObjectFromGameModel(req.image))
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  /**
-   * Finds the metadata of an image in the database and returns it as a JSON response.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-     async findGame (req, res, next) {
+    async findGame (req, res, next) {
       try {
-        console.log(req.game)
-        res.json(this.ObjectFromGameModel(req.game))
+        res.status(200)
+        res.json({
+          status: 200,
+          links: req.linksUtil.getLinks(req, {}),
+          resources: this.ObjectFromGameModel(req, req.game)
+        })
       } catch (error) {
         next(error)
       }
@@ -187,7 +177,6 @@ export class GamesController {
       if (game0.length > 0) {
         var i = 1
         while (true) {
-          console.log(gameID + '(' + i + ')')
           const games = await Game.find({ resourceId: gameID + '(' + i + ')' })
           if (games.length === 0) {
             gameID = gameID + '(' + i + ')'
@@ -209,7 +198,7 @@ export class GamesController {
           resourceId: gameID
         })
 
-      const responseGame = this.ObjectFromGameModel(game)
+      const responseGame = this.ObjectFromGameModel(req, game)
 
       await game.save()
 
@@ -235,20 +224,14 @@ export class GamesController {
    */
   async delete (req, res, next) {
     try {
-      // Make DELETE request to Image Service
-      const response = await this.ImageServiceFetchRequest('delete', 'images/' + req.image._id)
-
-      if (response.status !== 204) {
-        throw Error
-      }
-
-      await req.image.delete()
-      res
-        .json({
-          status: 204,
-          message: 'Image deleted'
+      const gameTitle = req.game.gameTitle
+      await req.game.delete()
+      res.status(200)
+      res.json({
+          status: 200,
+          message: `Your ad for ${gameTitle} was deleted.`,
+          links: req.linksUtil.getLinks(req, {})
         })
-        .status(204)
     } catch (error) {
       next(error)
     }
@@ -264,7 +247,7 @@ export class GamesController {
    */
   async update (req, res, next) {
     try {
-      const id = req.image._id
+      const id = req.game._id
       const imageUrl = req.image.imageUrl
 
       // Delete the original image metadata stored in the database

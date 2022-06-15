@@ -28,6 +28,11 @@ import jwt from 'jsonwebtoken'
     if (!req.hasOwnProperty('user')) {
       globalLinks.login = 'login'
       globalLinks.register = 'register'
+    } else {
+      globalLinks.myPostedGames = 'games/' + req.user.email
+      globalLinks.gamesPostedByUser = 'games/{user}'
+      globalLinks.currentlyPostedGames = 'games'
+      globalLinks.currentlyPostedGamesForConsole = 'games/{console}'
     }
     // Add local links.
     for (const [key, value] of Object.entries(localLinks)) {
