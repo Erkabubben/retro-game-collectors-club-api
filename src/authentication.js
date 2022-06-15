@@ -55,9 +55,28 @@ export class Authentication {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  ensureUserIsResourceOwner = (req, res, next) => {
+  ensureUserIsGameOwner = (req, res, next) => {
     try {
       if (req.user.email !== req.game.owner) {
+        throw Error
+      }
+      next()
+    } catch (error) {
+      next(createError(404))
+    }
+  }
+
+  /**
+   * Ensures that the requested resource is owned by the user by checking
+   * the resource owner against the user specified in the JWT.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  ensureUserIsWebhookOwner = (req, res, next) => {
+    try {
+      if (req.user.email !== req.webhook.owner) {
         throw Error
       }
       next()

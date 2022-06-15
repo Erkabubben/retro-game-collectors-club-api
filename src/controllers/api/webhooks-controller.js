@@ -32,9 +32,9 @@ export class WebhooksController {
         next(createError(404, 'Webhook with id not found.'))
         return
       }
-
-      // Provide the image to req.
+      // Provide the webhook to req.
       req.webhook = webhook
+      console.log(req.webhook)
       // Next middleware.
       next()
     } catch (error) {
@@ -181,15 +181,15 @@ export class WebhooksController {
    */
   async delete (req, res, next) {
     try {
-      const recipientUri = req.webhook.recipientUri
+      const recipientUrl = req.webhook.recipientUrl
       const type = req.webhook.type
-      if (req.body.hasOwnProperty('webhook')) {
+      if (req.hasOwnProperty('webhook')) {
         await req.webhook.delete()
         res
           .status(200)
           .json({
             status: 200,
-            message: `Your Webhook registerd for URI "${recipientUri}" on event type "${type}" was deleted.`,
+            message: `Your Webhook registered for URL ${recipientUrl} on event type ${type} was deleted.`,
             links: req.linksUtil.getLinks(req, {})
           })
       }
