@@ -74,14 +74,18 @@ router.param('id', (req, res, next, id) => controller.loadGame(req, res, next, i
 
 router.get('/', authenticateJWT, (req, res, next) => controller.findAll(req, res, next))
 
+router.get('/:console', authenticateJWT, (req, res, next) => controller.findAllGamesForConsole(req, res, next))
+
+router.get('/:console/:id', authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
+
 router.get('/:console/:id', authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
 
 //router.get('/:id', authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
 
 router.post('/', authenticateJWT, (req, res, next) => controller.create(req, res, next))
 
-router.put('/:id', authenticateJWT, ensureUserIsResourceOwner, (req, res, next) => controller.update(req, res, next))
+router.put('/:console/:id', authenticateJWT, ensureUserIsResourceOwner, (req, res, next) => controller.update(req, res, next))
 
-router.patch('/:id', authenticateJWT, ensureUserIsResourceOwner, (req, res, next) => controller.partialUpdate(req, res, next))
+router.patch('/:console/:id', authenticateJWT, ensureUserIsResourceOwner, (req, res, next) => controller.partialUpdate(req, res, next))
 
-router.delete('/:id', authenticateJWT, ensureUserIsResourceOwner, (req, res, next) => controller.delete(req, res, next))
+router.delete('/:console/:id', authenticateJWT, ensureUserIsResourceOwner, (req, res, next) => controller.delete(req, res, next))

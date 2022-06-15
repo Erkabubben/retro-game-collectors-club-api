@@ -31,7 +31,7 @@ export class GamesController {
       
       // If no image found send a 404 (Not Found).
       if (!game) {
-        next(createError(404, 'Game with id not found'))
+        next(createError(404, 'Game with id not found.'))
         return
       }
 
@@ -65,9 +65,9 @@ export class GamesController {
     }
 
   /**
-   * Takes an Image Mongoose model and returns a regular object.
+   * Takes an Game Mongoose model and returns a regular object.
    *
-   * @param {Game} game - An Image Mongoose model.
+   * @param {Game} game - A Game Mongoose model.
    * @returns {object} - A regular object.
    */
   ObjectFromGameModel (game) {
@@ -110,6 +110,36 @@ export class GamesController {
       next(error)
     }
   }
+
+  /**
+   * Finds the metadata of all the images belonging to the user, and returns it as an
+   * array in a JSON response.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+     async findAllGamesForConsole (req, res, next) {
+      try {
+        const games = await Game.find({ console: req.console })
+        const gameObjects = []
+        games.forEach(image => {
+          gameObjects.push(this.ObjectFromGameModel(image))
+        })
+        const message = gameObjects.length > 0
+          ? `There are a total of ${gameObjects.length} game ads for the ${req.console} posted.`
+          : `There are currently no game ads for the ${req.console} posted.`
+        res.status(200)
+        res.json({
+          message: message,
+          status: 200,
+          links: req.linksUtil.getLinks(req, {}),
+          resources: gameObjects
+        })
+      } catch (error) {
+        next(error)
+      }
+    }
 
   /**
    * Finds the metadata of an image in the database and returns it as a JSON response.
@@ -167,11 +197,9 @@ export class GamesController {
         }
       }
 
-      console.log(gameID)
-
       const game = new Game({
           gameTitle: req.body.gameTitle,
-          console: req.body.console,
+          console: dashify(req.body.console),
           condition: req.body.condition,
           imageUrl: req.body.imageUrl,
           city: req.body.city,
