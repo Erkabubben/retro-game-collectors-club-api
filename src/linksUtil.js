@@ -63,18 +63,18 @@ import dashify from 'dashify'
    * @returns {object} - An object containing the list of links used to navigate the API.
    */
   getGameModelFromRequestData (req, resourceId) {
-      return new Game({
-        gameTitle: req.body.gameTitle,
-        console: dashify(req.body.console),
-        condition: req.body.condition,
-        imageUrl: req.body.imageUrl,
-        city: req.body.city,
-        price: req.body.price,
-        description: req.body.description,
-        owner: req.user.email,
-        resourceId: resourceId
-      })
-    }
+    return new Game({
+      gameTitle: req.body.gameTitle,
+      console: dashify(req.body.console),
+      condition: req.body.condition,
+      imageUrl: req.body.imageUrl,
+      city: req.body.city,
+      price: req.body.price,
+      description: req.body.description,
+      owner: req.user.email,
+      resourceId: resourceId
+    })
+  }
 
   /**
    * Authenticates the user by verifying the enclosed JWT.

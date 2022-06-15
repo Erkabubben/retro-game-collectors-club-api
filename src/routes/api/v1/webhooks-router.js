@@ -19,7 +19,7 @@ const controller = new WebhooksController()
 // Map HTTP verbs and route paths to controller actions.
 // router.param('console', (req, res, next, id) => controller.loadConsole(req, res, next, id))
 
-router.param('id', (req, res, next, id) => controller.loadGame(req, res, next, id))
+router.param('id', (req, res, next, id) => controller.loadWebhook(req, res, next, id))
 
 router.get('/', auth.authenticateJWT, (req, res, next) => controller.getCurrentUserWebhooks(req, res, next))
 
@@ -27,7 +27,7 @@ router.get('/', auth.authenticateJWT, (req, res, next) => controller.getCurrentU
 
 router.get('/:console/:id', auth.authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
 
-router.get('/:console/:id', auth.authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
+router.get('/:console/:id', auth.authenticateJWT, (req, res, next) => controller.findGame(req, res, next))*/
 
 //router.get('/:id', auth.authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
 
@@ -37,4 +37,4 @@ router.put('/:console/:id', auth.authenticateJWT, auth.ensureUserIsResourceOwner
 
 router.patch('/:console/:id', auth.authenticateJWT, auth.ensureUserIsResourceOwner, (req, res, next) => controller.partialUpdate(req, res, next))
 
-router.delete('/:console/:id', auth.authenticateJWT, auth.ensureUserIsResourceOwner, (req, res, next) => controller.delete(req, res, next))*/
+router.delete('/:console/:id', auth.authenticateJWT, auth.ensureUserIsResourceOwner, (req, res, next) => controller.delete(req, res, next))

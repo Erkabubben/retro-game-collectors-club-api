@@ -22,10 +22,10 @@ export class WebhooksController {
    * @param {Function} next - Express next middleware function.
    * @param {string} id - The value of the id for the task to load.
    */
-  async loadConsole (req, res, next, id) {
+  async loadWebhook (req, res, next, id) {
     try {
-      // Provide the console to req.
-      req.console = id
+      // Provide the webhook to req.
+      req.webhook = id
       // Next middleware.
       next()
     } catch (error) {
@@ -42,10 +42,25 @@ export class WebhooksController {
   ObjectFromWebhookModel (req, webhook) {
     return {
       type: webhook.type,
-      recipientUrl: webhook.imageUrl,
+      recipientUrl: webhook.recipientUrl,
       owner: webhook.owner,
-      href: req.protocol + '://' + process.env.APP_URI + '/api/games/' + webhook._Id
+      href: req.protocol + '://' + process.env.APP_URI + '/api/webhooks/' + webhook._id
     }
+  }
+
+  /**
+   * Gets an object containing the list of links used to navigate the API.
+   *
+   * @param {object} req - Express request object.
+   * @returns {object} - An object containing the list of links used to navigate the API.
+   */
+  getWebhookModelFromRequestData (req) {
+    const webhook = new Webhook({
+      type: req.body.type,
+      recipientUrl: req.body.recipientUrl,
+      owner: req.user.email,
+    })
+    return webhook
   }
 
   /**
@@ -68,11 +83,63 @@ export class WebhooksController {
       res.json({
         message: message,
         status: 200,
-        links: req.linksUtil.getLinks(req, {}),
-        resources: webhookObjects
+        resources: webhookObjects,
+        links: req.linksUtil.getLinks(req, {})
       })
     } catch (error) {
       next(error)
     }
   }
+
+    /**
+   * Creates a new image with metadata, based on the form content. The image
+   * is stored in the Image Service, the metadata in the Resource Service database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async create (req, res, next) {
+  try {
+    if (!req.body.hasOwnProperty('type') || !req.body.hasOwnProperty('recipientUrl')
+      || req.body.type === '' || req.body.recipientUrl === '' ) {
+      res.status(500)
+      res.json({
+        status: 500,
+        message: 'Required fields \'type\' and \'recipientUrl\' are missing.',
+        links: req.linksUtil.getLinks(req, {}),
+      })
+      return
+    }
+
+    const existingWebhook = await Webhook.findOne({ type: req.body.type, recipientUrl: req.body.recipientUrl, owner: req.user.email })
+    if (existingWebhook !== null) {
+      res.status(409)
+      res.json({
+        status: 409,
+        message: 'You have already registered this exact Webhook.',
+        resource: this.ObjectFromWebhookModel(req, existingWebhook),
+        links: req.linksUtil.getLinks(req, {}),
+      })
+      return
+    }
+
+    const webhook = this.getWebhookModelFromRequestData(req)
+
+    const responseWebhook = this.ObjectFromWebhookModel(req, webhook)
+    await webhook.validate()
+
+    await webhook.save()
+
+    res.status(201)
+    res.json({
+      message: 'A new Webhook was registered.',
+      status: 201,
+      resource: responseWebhook,
+      links: req.linksUtil.getLinks(req, {})
+    })
+  } catch (error) {
+    next(error)
+  }
+}
 }

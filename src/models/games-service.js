@@ -110,12 +110,10 @@ export const User = mongoose.model('User', userSchema)
 
 // Create a schema for the User documents.
 const webhookSchema = new mongoose.Schema({
-  email: {
+  owner: {
     type: String,
     required: 'VALIDATION ERROR: `{PATH}` is required!',
-    trim: true,
-    maxlength: [100, 'VALIDATION ERROR: `{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
-    minlength: [4, 'VALIDATION ERROR: `{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+    trim: true
   },
   type: {
     type: String,
@@ -130,7 +128,7 @@ const webhookSchema = new mongoose.Schema({
     trim: true,
     maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
     minLength: [1, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
-  },
+  }
 }, {
   timestamps: true,
   versionKey: false
