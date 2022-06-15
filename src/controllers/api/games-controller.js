@@ -186,17 +186,7 @@ export class GamesController {
         }
       }
 
-      const game = new Game({
-          gameTitle: req.body.gameTitle,
-          console: dashify(req.body.console),
-          condition: req.body.condition,
-          imageUrl: req.body.imageUrl,
-          city: req.body.city,
-          price: req.body.price,
-          description: req.body.description,
-          owner: req.user.email,
-          resourceId: gameID
-        })
+      const game = req.linksUtil.getGameModelFromRequestData(req, gameID)
 
       const responseGame = this.ObjectFromGameModel(req, game)
 
@@ -247,23 +237,21 @@ export class GamesController {
    */
   async update (req, res, next) {
     try {
-      const id = req.game._id
-      const imageUrl = req.image.imageUrl
+      const resourceId = req.game.resourceId
 
-      // Delete the original image metadata stored in the database
-      await req.image.delete()
+      // Delete the original game metadata stored in the database
+      await req.game.delete()
 
-      // Create a new image based on the form contents
-      const newImage = new Game({
-        imageUrl: imageUrl,
-        _id: id,
+      // Create a new game based on the form contents
+      const newGame = new Game({
+        _id: resourceId,
         owner: req.user.email
       })
 
-      newImage.description = req.body.description
-      newImage.location = req.body.location
+      newGame.description = req.body.description
+      newGame.location = req.body.location
 
-      await newImage.save()
+      await newGame.save()
 
       res
         .status(204)
