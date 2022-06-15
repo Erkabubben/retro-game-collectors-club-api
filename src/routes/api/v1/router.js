@@ -9,6 +9,7 @@
 import express from 'express'
 import { router as gamesRouter } from './games-router.js'
 import { router as usersRouter } from './users-router.js'
+import { router as webhooksRouter } from './webhooks-router.js'
 import { APIController } from '../../../controllers/api/api-controller.js'
 
 export const router = express.Router()
@@ -19,6 +20,7 @@ const controller = new APIController()
 router.get('/', (req, res, next) => controller.index(req, res, next))
 
 router.use('/games', gamesRouter)
+router.use('/webhooks', webhooksRouter)
 //router.use('/users', usersRouter)
 
 router.get('/auth-welcome', (req, res, next) => res.redirect('http://localhost:8081/api/'))

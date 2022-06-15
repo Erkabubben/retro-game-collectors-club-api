@@ -8,7 +8,6 @@
 
 import { Game } from '../../models/games-service.js'
 import createError from 'http-errors'
-import fetch from 'node-fetch'
 import dashify from 'dashify'
 
 /**
@@ -53,16 +52,16 @@ export class GamesController {
    * @param {Function} next - Express next middleware function.
    * @param {string} id - The value of the id for the task to load.
    */
-     async loadConsole (req, res, next, id) {
-      try {
-        // Provide the console to req.
-        req.console = id
-        // Next middleware.
-        next()
-      } catch (error) {
-        next(error)
-      }
+  async loadConsole (req, res, next, id) {
+    try {
+      // Provide the console to req.
+      req.console = id
+      // Next middleware.
+      next()
+    } catch (error) {
+      next(error)
     }
+  }
 
   /**
    * Takes an Game Mongoose model and returns a regular object.
@@ -154,8 +153,8 @@ export class GamesController {
         res.status(200)
         res.json({
           status: 200,
-          links: req.linksUtil.getLinks(req, {}),
-          resources: this.ObjectFromGameModel(req, req.game)
+          resource: this.ObjectFromGameModel(req, req.game),
+          links: req.linksUtil.getLinks(req, {})
         })
       } catch (error) {
         next(error)
@@ -172,6 +171,17 @@ export class GamesController {
    */
   async create (req, res, next) {
     try {
+      if (!req.body.hasOwnProperty('gameTitle') || !req.body.hasOwnProperty('console')
+        || req.body.gameTitle === '' || req.body.console === '' ) {
+        res.status(500)
+        res.json({
+          status: 500,
+          message: 'Required fields \'gameTitle\' and \'console\' are missing.',
+          links: req.linksUtil.getLinks(req, {}),
+        })
+        return
+      }
+
       var gameID = dashify(req.body.console) + '/' + dashify(req.body.gameTitle)
       var game0 = await Game.find({ resourceId: gameID })
       if (game0.length > 0) {
@@ -189,6 +199,7 @@ export class GamesController {
       const game = req.linksUtil.getGameModelFromRequestData(req, gameID)
 
       const responseGame = this.ObjectFromGameModel(req, game)
+      await game.validate()
 
       await game.save()
 
@@ -216,8 +227,9 @@ export class GamesController {
     try {
       const gameTitle = req.game.gameTitle
       await req.game.delete()
-      res.status(200)
-      res.json({
+      res
+        .status(200)
+        .json({
           status: 200,
           message: `Your ad for ${gameTitle} was deleted.`,
           links: req.linksUtil.getLinks(req, {})
@@ -238,24 +250,26 @@ export class GamesController {
   async update (req, res, next) {
     try {
       const resourceId = req.game.resourceId
+      const gameTitle = req.game.gameTitle
+
+      // Create a new game based on the form contents
+      const newGame = req.linksUtil.getGameModelFromRequestData(req, resourceId)
+
+      await newGame.validate()
 
       // Delete the original game metadata stored in the database
       await req.game.delete()
 
-      // Create a new game based on the form contents
-      const newGame = new Game({
-        _id: resourceId,
-        owner: req.user.email
-      })
-
-      newGame.description = req.body.description
-      newGame.location = req.body.location
-
       await newGame.save()
 
       res
-        .status(204)
-        .json()
+        .status(200)
+        .json({
+          status: 200,
+          message: `Your ad for ${gameTitle} was updated.`,
+          links: req.linksUtil.getLinks(req, {}),
+          resource: this.ObjectFromGameModel(req, newGame)
+        })
     } catch (error) {
       next(error)
     }

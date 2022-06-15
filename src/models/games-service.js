@@ -26,7 +26,7 @@ const gameSchema = new mongoose.Schema({
   },
   resourceId: {
     type: String,
-    required: 'VALIDATION ERROR: `{PATH}` is required!',
+    required: '`{PATH}` is required!',
     trim: true
   },
   condition: {
@@ -37,13 +37,7 @@ const gameSchema = new mongoose.Schema({
   },
   imageUrl: {
     type: String,
-    required: '`{PATH}` is required!',
     trim: true,
-    maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
-    minLength: [4, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
-  },
-  city: {
-    type: String,
     maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
     minLength: [4, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
   },
@@ -60,6 +54,7 @@ const gameSchema = new mongoose.Schema({
   },
   owner: {
     type: String,
+    required: '`{PATH}` is required!',
     index: true
   }
 }, {
@@ -112,3 +107,34 @@ const userSchema = new mongoose.Schema({
 
 // Create a model using the schema.
 export const User = mongoose.model('User', userSchema)
+
+// Create a schema for the User documents.
+const webhookSchema = new mongoose.Schema({
+  email: {
+    type: String,
+    required: 'VALIDATION ERROR: `{PATH}` is required!',
+    trim: true,
+    maxlength: [100, 'VALIDATION ERROR: `{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
+    minlength: [4, 'VALIDATION ERROR: `{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+  },
+  type: {
+    type: String,
+    required: '`{PATH}` is required!',
+    trim: true,
+    maxLength: [100, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
+    minLength: [3, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+  },
+  recipientUrl: {
+    type: String,
+    required: '`{PATH}` is required!',
+    trim: true,
+    maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
+    minLength: [1, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
+  },
+}, {
+  timestamps: true,
+  versionKey: false
+})
+
+// Create a model using the schema.
+export const Webhook = mongoose.model('Webhook', webhookSchema)
