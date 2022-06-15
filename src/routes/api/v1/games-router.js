@@ -69,7 +69,7 @@ const controller = new GamesController()
 
 // Map HTTP verbs and route paths to controller actions.
 
-router.param('id', (req, res, next, id) => controller.loadImage(req, res, next, id))
+router.param('id', (req, res, next, id) => controller.loadGame(req, res, next, id))
 
 router.get('/', authenticateJWT, (req, res, next) => controller.findAll(req, res, next))
 

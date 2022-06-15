@@ -9,6 +9,7 @@
 import { Game } from '../../models/games-service.js'
 import createError from 'http-errors'
 import fetch from 'node-fetch'
+import dashify from 'dashify'
 
 /**
  * Encapsulates a controller.
@@ -22,7 +23,7 @@ export class GamesController {
    * @param {Function} next - Express next middleware function.
    * @param {string} id - The value of the id for the task to load.
    */
-  async loadImage (req, res, next, id) {
+  async loadGame (req, res, next, id) {
     try {
       // Get the image.
       const image = await Game.findById(id)
@@ -77,9 +78,10 @@ export class GamesController {
       games.forEach(image => {
         gameObjects.push(this.ObjectFromGameModel(image))
       })
+      const message = gameObjects.length > 0 ? 'You have a total of ' + gameObjects.length + ' game ads posted.' : 'You currently have no game ads posted.'
       res.status(200)
       res.json({
-        message: 'The password length needs to be at least 10 and no more than 1000 characters.',
+        message: message,
         status: 200,
         links: req.linksUtil.getLinks(req, {}),
         resources: gameObjects
@@ -114,6 +116,23 @@ export class GamesController {
    */
   async create (req, res, next) {
     try {
+      var gameID = dashify(req.body.console) + '/' + dashify(req.body.gameTitle)
+      var game0 = await Game.find({ resourceId: gameID })
+      if (game0.length > 0) {
+        var i = 1
+        while (true) {
+          console.log(gameID + '(' + i + ')')
+          const games = await Game.find({ resourceId: gameID + '(' + i + ')' })
+          if (games.length === 0) {
+            gameID = gameID + '(' + i + ')'
+            break
+          }
+          i++
+        }
+      }
+
+      console.log(gameID)
+
       const game = new Game({
           gameTitle: req.body.gameTitle,
           console: req.body.console,
@@ -122,7 +141,8 @@ export class GamesController {
           city: req.body.city,
           price: req.body.price,
           description: req.body.description,
-          owner: req.user.email
+          owner: req.user.email,
+          resourceId: gameID
         })
 
       const responseGame = this.ObjectFromGameModel(game)

@@ -24,6 +24,11 @@ const gameSchema = new mongoose.Schema({
     maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
     minLength: [1, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
   },
+  resourceId: {
+    type: String,
+    required: 'VALIDATION ERROR: `{PATH}` is required!',
+    trim: true
+  },
   condition: {
     type: Number,
     required: '`{PATH}` is required!',
