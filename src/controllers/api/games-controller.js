@@ -9,6 +9,7 @@
 import { Game } from '../../models/games-service.js'
 import createError from 'http-errors'
 import dashify from 'dashify'
+import fetch from 'node-fetch'
 
 /**
  * Encapsulates a controller.
@@ -25,7 +26,6 @@ export class GamesController {
   async loadGame (req, res, next, id) {
     try {
       // Get the game.
-      //const game = await Game.findById(id)
       const game = await Game.findOne({ resourceId: req.console + '/' + id })
       
       // If no image found send a 404 (Not Found).
@@ -149,18 +149,18 @@ export class GamesController {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-    async findGame (req, res, next) {
-      try {
-        res.status(200)
-        res.json({
-          status: 200,
-          resource: this.ObjectFromGameModel(req, req.game),
-          links: req.linksUtil.getLinks(req, {})
-        })
-      } catch (error) {
-        next(error)
-      }
+  async findGame (req, res, next) {
+    try {
+      res.status(200)
+      res.json({
+        status: 200,
+        resource: this.ObjectFromGameModel(req, req.game),
+        links: req.linksUtil.getLinks(req, {})
+      })
+    } catch (error) {
+      next(error)
     }
+  }
 
   /**
    * Creates a new image with metadata, based on the form content. The image
@@ -203,6 +203,13 @@ export class GamesController {
       await game.validate()
 
       await game.save()
+
+      //
+      var registeredWebhooks = await Webhook.find({ type: 'on-create-game' })
+      registeredWebhooks.forEach(registeredWebhook => {
+        
+      })
+      //
 
       res.status(201)
       res.json({

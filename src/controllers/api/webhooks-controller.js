@@ -25,7 +25,16 @@ export class WebhooksController {
   async loadWebhook (req, res, next, id) {
     try {
       // Provide the webhook to req.
-      req.webhook = id
+      const webhook = await Webhook.findOne({ _id: id })
+
+      // If no image found send a 404 (Not Found).
+      if (!webhook) {
+        next(createError(404, 'Webhook with id not found.'))
+        return
+      }
+
+      // Provide the image to req.
+      req.webhook = webhook
       // Next middleware.
       next()
     } catch (error) {
@@ -92,7 +101,7 @@ export class WebhooksController {
     }
   }
 
-    /**
+  /**
    * Creates a new image with metadata, based on the form content. The image
    * is stored in the Image Service, the metadata in the Resource Service database.
    *
@@ -101,46 +110,91 @@ export class WebhooksController {
    * @param {Function} next - Express next middleware function.
    */
   async create (req, res, next) {
-  try {
-    if (!req.body.hasOwnProperty('type') || !req.body.hasOwnProperty('recipientUrl')
-      || req.body.type === '' || req.body.recipientUrl === '' ) {
-      res.status(500)
+    try {
+      if (!req.body.hasOwnProperty('type') || !req.body.hasOwnProperty('recipientUrl')
+        || req.body.type === '' || req.body.recipientUrl === '' ) {
+        res.status(500)
+        res.json({
+          status: 500,
+          message: 'Required fields \'type\' and \'recipientUrl\' are missing.',
+          links: req.linksUtil.getLinks(req, {}),
+        })
+        return
+      }
+
+      const existingWebhook = await Webhook.findOne({ type: req.body.type, recipientUrl: req.body.recipientUrl, owner: req.user.email })
+      if (existingWebhook !== null) {
+        res.status(409)
+        res.json({
+          status: 409,
+          message: 'You have already registered this exact Webhook.',
+          resource: this.ObjectFromWebhookModel(req, existingWebhook),
+          links: req.linksUtil.getLinks(req, {}),
+        })
+        return
+      }
+
+      const webhook = this.getWebhookModelFromRequestData(req)
+      const responseWebhook = this.ObjectFromWebhookModel(req, webhook)
+      await webhook.validate()
+      await webhook.save()
+
+      res.status(201)
       res.json({
-        status: 500,
-        message: 'Required fields \'type\' and \'recipientUrl\' are missing.',
-        links: req.linksUtil.getLinks(req, {}),
+        message: 'A new Webhook was registered.',
+        status: 201,
+        resource: responseWebhook,
+        links: req.linksUtil.getLinks(req, {})
       })
-      return
+    } catch (error) {
+      next(error)
     }
-
-    const existingWebhook = await Webhook.findOne({ type: req.body.type, recipientUrl: req.body.recipientUrl, owner: req.user.email })
-    if (existingWebhook !== null) {
-      res.status(409)
-      res.json({
-        status: 409,
-        message: 'You have already registered this exact Webhook.',
-        resource: this.ObjectFromWebhookModel(req, existingWebhook),
-        links: req.linksUtil.getLinks(req, {}),
-      })
-      return
-    }
-
-    const webhook = this.getWebhookModelFromRequestData(req)
-
-    const responseWebhook = this.ObjectFromWebhookModel(req, webhook)
-    await webhook.validate()
-
-    await webhook.save()
-
-    res.status(201)
-    res.json({
-      message: 'A new Webhook was registered.',
-      status: 201,
-      resource: responseWebhook,
-      links: req.linksUtil.getLinks(req, {})
-    })
-  } catch (error) {
-    next(error)
   }
-}
+
+  /**
+   * Finds the metadata of an image in the database and returns it as a JSON response.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async findWebhook (req, res, next) {
+    try {
+        res.status(200)
+        res.json({
+          status: 200,
+          resource: this.ObjectFromWebhookModel(req, req.webhook),
+          links: req.linksUtil.getLinks(req, {})
+        })
+      } catch (error) {
+        next(error)
+      }
+    }
+
+  /**
+   * Deletes an image from the Image Service and its image metadata
+   * from the database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async delete (req, res, next) {
+    try {
+      const recipientUri = req.webhook.recipientUri
+      const type = req.webhook.type
+      if (req.body.hasOwnProperty('webhook')) {
+        await req.webhook.delete()
+        res
+          .status(200)
+          .json({
+            status: 200,
+            message: `Your Webhook registerd for URI "${recipientUri}" on event type "${type}" was deleted.`,
+            links: req.linksUtil.getLinks(req, {})
+          })
+      }
+    } catch (error) {
+      next(error)
+    }
+  }
 }

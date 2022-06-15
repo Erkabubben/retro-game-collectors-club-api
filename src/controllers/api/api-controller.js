@@ -40,8 +40,8 @@ export class APIController {
   }
 
   async register (req, res, next) {
-    const users = await User.find({ email: req.body.email })
-    if (users.length > 0) {
+    const existingUser = await User.findOne({ email: req.body.email })
+    if (existingUser !== null) {
       res.status(409)
       res.json({
         message: 'A user account is already registered on the provided Email address.',
@@ -50,30 +50,20 @@ export class APIController {
       })
       return
     }
-    if (req.body.password.length < 10 || req.body.password.length > 1000) {
+    if (!req.body.hasOwnProperty('password') || req.body.password.length < 10 || req.body.password.length > 1000) {
       res.status(400)
       res.json({
-        message: 'The password length needs to be at least 10 and no more than 1000 characters.',
+        message: 'A password with a length of at least 10 and no more than 1000 characters needs to be provided.',
         status: 400,
         links: req.linksUtil.getLinks(req, {})
       })
       return
     }
-    var user = null
+    const user = new User({
+      email: req.body.email,
+    })
     try {
-      user = new User({
-        email: req.body.email,
-        //username: req.body.username,
-        //city: req.body.city
-        //imageUrl: req.body.imageUrl,
-        //profileInfo: req.body.profileInfo
-      })
-    } catch (error) {
-      next(error)
-      return
-    }
-    try {
-      await user.save()
+      await user.validate()
     } catch (error) {
       next(error)
       return
@@ -93,12 +83,11 @@ export class APIController {
       const responseJSON = await response.json()
       console.log(responseJSON)
       if (responseJSON.status === 200 || responseJSON.status === 201) {
-        console.log('NEW USER ADDED')
+        await user.save()
         res.json(responseJSON)
         res.status(responseJSON.status)
       }
     } catch (error) {
-      await user.delete()
       next(error)
       return
     }
