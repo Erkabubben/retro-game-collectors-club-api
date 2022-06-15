@@ -44,6 +44,7 @@ export class WebhooksController {
       type: webhook.type,
       recipientUrl: webhook.recipientUrl,
       owner: webhook.owner,
+      createdAt: webhook.createdAt,
       href: req.protocol + '://' + process.env.APP_URI + '/api/webhooks/' + webhook._id
     }
   }

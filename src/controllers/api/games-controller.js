@@ -79,6 +79,7 @@ export class GamesController {
       price: game.price,
       description: game.description,
       owner: game.owner,
+      createdAt: game.createdAt,
       href: req.protocol + '://' + process.env.APP_URI + '/api/games/' + game.resourceId
     }
   }
