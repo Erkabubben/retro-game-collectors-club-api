@@ -68,12 +68,15 @@ const ensureUserIsResourceOwner = (req, res, next) => {
 const controller = new GamesController()
 
 // Map HTTP verbs and route paths to controller actions.
+router.param('console', (req, res, next, id) => controller.loadConsole(req, res, next, id))
 
 router.param('id', (req, res, next, id) => controller.loadGame(req, res, next, id))
 
 router.get('/', authenticateJWT, (req, res, next) => controller.findAll(req, res, next))
 
-router.get('/:id', authenticateJWT, ensureUserIsResourceOwner, (req, res, next) => controller.find(req, res, next))
+router.get('/:console/:id', authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
+
+//router.get('/:id', authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
 
 router.post('/', authenticateJWT, (req, res, next) => controller.create(req, res, next))
 

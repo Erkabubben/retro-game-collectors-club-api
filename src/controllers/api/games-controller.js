@@ -25,17 +25,18 @@ export class GamesController {
    */
   async loadGame (req, res, next, id) {
     try {
-      // Get the image.
-      const image = await Game.findById(id)
-
+      // Get the game.
+      //const game = await Game.findById(id)
+      const game = await Game.findOne({ resourceId: req.console + '/' + id })
+      
       // If no image found send a 404 (Not Found).
-      if (!image) {
-        next(createError(404, 'Image with id not found'))
+      if (!game) {
+        next(createError(404, 'Game with id not found'))
         return
       }
 
       // Provide the image to req.
-      req.image = image
+      req.game = game
 
       // Next middleware.
       next()
@@ -43,6 +44,25 @@ export class GamesController {
       next(error)
     }
   }
+
+  /**
+   * Provide req.image to the route if :id is present.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @param {string} id - The value of the id for the task to load.
+   */
+     async loadConsole (req, res, next, id) {
+      try {
+        // Provide the console to req.
+        req.console = id
+        // Next middleware.
+        next()
+      } catch (error) {
+        next(error)
+      }
+    }
 
   /**
    * Takes an Image Mongoose model and returns a regular object.
@@ -105,6 +125,22 @@ export class GamesController {
       next(error)
     }
   }
+
+  /**
+   * Finds the metadata of an image in the database and returns it as a JSON response.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+     async findGame (req, res, next) {
+      try {
+        console.log(req.game)
+        res.json(this.ObjectFromGameModel(req.game))
+      } catch (error) {
+        next(error)
+      }
+    }
 
   /**
    * Creates a new image with metadata, based on the form content. The image
