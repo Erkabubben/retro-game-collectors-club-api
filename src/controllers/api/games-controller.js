@@ -104,7 +104,7 @@ export class GamesController {
       res.json({
         message: message,
         status: 200,
-        links: req.linksUtil.getLinks(req, {}),
+        links: req.utils.getLinks(req, {}),
         resources: gameObjects
       })
     } catch (error) {
@@ -134,7 +134,7 @@ export class GamesController {
         res.json({
           message: message,
           status: 200,
-          links: req.linksUtil.getLinks(req, {}),
+          links: req.utils.getLinks(req, {}),
           resources: gameObjects
         })
       } catch (error) {
@@ -155,7 +155,7 @@ export class GamesController {
       res.json({
         status: 200,
         resource: this.ObjectFromGameModel(req, req.game),
-        links: req.linksUtil.getLinks(req, {})
+        links: req.utils.getLinks(req, {})
       })
     } catch (error) {
       next(error)
@@ -178,7 +178,7 @@ export class GamesController {
         res.json({
           status: 500,
           message: 'Required fields \'gameTitle\' and \'console\' are missing.',
-          links: req.linksUtil.getLinks(req, {}),
+          links: req.utils.getLinks(req, {}),
         })
         return
       }
@@ -197,14 +197,14 @@ export class GamesController {
         }
       }
 
-      const game = req.linksUtil.getGameModelFromRequestData(req, gameID)
+      const game = req.utils.getGameModelFromRequestData(req, gameID)
 
       const responseGame = this.ObjectFromGameModel(req, game)
       await game.validate()
 
       await game.save()
 
-      req.linksUtil.sendWebhook(req, 'on-create-game', {
+      req.utils.sendWebhook(req, 'on-create-game', {
         message: 'Webhook: on-create-game',
         resource: responseGame
       })
@@ -213,7 +213,7 @@ export class GamesController {
       res.json({
         message: 'A new game ad was posted.',
         status: 201,
-        links: req.linksUtil.getLinks(req, {}),
+        links: req.utils.getLinks(req, {}),
         resource: responseGame
       })
     } catch (error) {
@@ -238,7 +238,7 @@ export class GamesController {
         .json({
           status: 200,
           message: `Your ad for ${gameTitle} was deleted.`,
-          links: req.linksUtil.getLinks(req, {})
+          links: req.utils.getLinks(req, {})
         })
     } catch (error) {
       next(error)
@@ -259,7 +259,7 @@ export class GamesController {
       const gameTitle = req.game.gameTitle
 
       // Create a new game based on the form contents
-      const newGame = req.linksUtil.getGameModelFromRequestData(req, resourceId)
+      const newGame = req.utils.getGameModelFromRequestData(req, resourceId)
 
       await newGame.validate()
 
@@ -273,7 +273,7 @@ export class GamesController {
         .json({
           status: 200,
           message: `Your ad for ${gameTitle} was updated.`,
-          links: req.linksUtil.getLinks(req, {}),
+          links: req.utils.getLinks(req, {}),
           resource: this.ObjectFromGameModel(req, newGame)
         })
     } catch (error) {

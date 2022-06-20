@@ -15,7 +15,7 @@ import fetch from 'node-fetch'
 /**
  * Encapsulates a controller.
  */
- export class LinksUtil {
+ export class Utils {
   /**
    * Gets an object containing the list of links used to navigate the API.
    *

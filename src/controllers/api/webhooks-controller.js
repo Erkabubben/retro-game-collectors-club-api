@@ -94,7 +94,7 @@ export class WebhooksController {
         message: message,
         status: 200,
         resources: webhookObjects,
-        links: req.linksUtil.getLinks(req, {})
+        links: req.utils.getLinks(req, {})
       })
     } catch (error) {
       next(error)
@@ -117,7 +117,7 @@ export class WebhooksController {
         res.json({
           status: 500,
           message: 'Required fields \'type\' and \'recipientUrl\' are missing.',
-          links: req.linksUtil.getLinks(req, {}),
+          links: req.utils.getLinks(req, {}),
         })
         return
       }
@@ -129,7 +129,7 @@ export class WebhooksController {
           status: 409,
           message: 'You have already registered this exact Webhook.',
           resource: this.ObjectFromWebhookModel(req, existingWebhook),
-          links: req.linksUtil.getLinks(req, {}),
+          links: req.utils.getLinks(req, {}),
         })
         return
       }
@@ -144,7 +144,7 @@ export class WebhooksController {
         message: 'A new Webhook was registered.',
         status: 201,
         resource: responseWebhook,
-        links: req.linksUtil.getLinks(req, {})
+        links: req.utils.getLinks(req, {})
       })
     } catch (error) {
       next(error)
@@ -164,7 +164,7 @@ export class WebhooksController {
       res.json({
         status: 200,
         resource: this.ObjectFromWebhookModel(req, req.webhook),
-        links: req.linksUtil.getLinks(req, {})
+        links: req.utils.getLinks(req, {})
       })
     } catch (error) {
       next(error)
@@ -190,7 +190,7 @@ export class WebhooksController {
           .json({
             status: 200,
             message: `Your Webhook registered for URL ${recipientUrl} on event type ${type} was deleted.`,
-            links: req.linksUtil.getLinks(req, {})
+            links: req.utils.getLinks(req, {})
           })
       }
     } catch (error) {

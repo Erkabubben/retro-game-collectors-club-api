@@ -11,7 +11,7 @@ import helmet from 'helmet'
 import logger from 'morgan'
 import { router } from './routes/router.js'
 import { connectDB } from './config/mongoose.js'
-import { LinksUtil } from './linksUtil.js'
+import { Utils } from './utils.js'
 
 /**
  * The main function of the application.
@@ -33,12 +33,12 @@ const main = async () => {
   // Set Express to use JSON and extend the JSON file size limit (default is 100kb)
   app.use(express.json({ limit: '500kb' }))
 
-  const linksUtil = new LinksUtil()
+  const utils = new Utils()
 
   // Middleware to be executed before the routes.
   app.use((req, res, next) => {
-    // LinksUtil: Add LinksUtil to the Request-object to make it available in controllers.
-    req.linksUtil = linksUtil
+    // Utils: Add Utils to the Request-object to make it available in controllers.
+    req.utils = utils
 
     next()
   })
@@ -56,7 +56,7 @@ const main = async () => {
         .json({
           status: err.status,
           message: err.message,
-          links: req.linksUtil.getLinks(req, {})
+          links: req.utils.getLinks(req, {})
         })
       return
     //}

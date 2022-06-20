@@ -23,17 +23,17 @@ export class APIController {
    * @param {Function} next - Express next middleware function.
    */
   async index (req, res, next) {
-    if (req.linksUtil.authenticateJWT(req)) {
+    if (req.utils.authenticateJWT(req)) {
       res.json({
           message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently logged in as ' + req.user.email + '.)',
-          links: req.linksUtil.getLinks(req, {
+          links: req.utils.getLinks(req, {
               myAccount: 'me',
           })
       })
     } else {
       res.json({
           message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently not logged in.)',
-          links: req.linksUtil.getLinks(req, {})
+          links: req.utils.getLinks(req, {})
       })
     }
     next()
@@ -46,7 +46,7 @@ export class APIController {
       res.json({
         message: 'A user account is already registered on the provided Email address.',
         status: 409,
-        links: req.linksUtil.getLinks(req, {})
+        links: req.utils.getLinks(req, {})
       })
       return
     }
@@ -55,7 +55,7 @@ export class APIController {
       res.json({
         message: 'A password with a length of at least 10 and no more than 1000 characters needs to be provided.',
         status: 400,
-        links: req.linksUtil.getLinks(req, {})
+        links: req.utils.getLinks(req, {})
       })
       return
     }
