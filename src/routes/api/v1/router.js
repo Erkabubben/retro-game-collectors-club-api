@@ -21,6 +21,6 @@ router.get('/', (req, res, next) => controller.index(req, res, next))
 router.use('/games', gamesRouter)
 router.use('/webhooks', webhooksRouter)
 
-router.get('/auth-welcome', (req, res, next) => res.redirect('http://localhost:8081/api/'))
-router.post('/login', (req, res, next) => res.redirect(307, 'http://localhost:8081/api/login'))
+router.get('/auth-welcome', (req, res, next) => res.redirect(process.env.AUTH_SERVICE_URI + '/api/'))
+router.post('/login', (req, res, next) => res.redirect(307, process.env.AUTH_SERVICE_URI + '/api/login'))
 router.post('/register', (req, res, next) => controller.register(req, res, next))

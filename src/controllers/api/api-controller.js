@@ -73,7 +73,7 @@ export class APIController {
         email: req.body.email,
         password: req.body.password
       })
-      const response = await fetch('http://localhost:8081/api/register', {
+      const response = await fetch(process.env.AUTH_SERVICE_URI +'/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'

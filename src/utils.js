@@ -216,7 +216,7 @@ import fetch from 'node-fetch'
     await Game.deleteMany({})
     await Webhook.deleteMany({})
     console.log('All data on games-service databases was deleted.')
-    const response = await fetch('http://localhost:8081/api/deleteAll', {
+    const response = await fetch(process.env.AUTH_SERVICE_URI + '/api/deleteAll', {
       method: 'POST',
       headers: {
         'Authorization': 'Bearer delete-all-from-games-service',
@@ -374,7 +374,7 @@ import fetch from 'node-fetch'
             email: testUser.email,
             password: testUser.password
           })
-          const response = await fetch('http://localhost:8081/api/register', {
+          const response = await fetch(process.env.AUTH_SERVICE_URI +'/api/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
