@@ -1,5 +1,5 @@
 /**
- * Routes specific to the Resource Service application.
+ * Routes specific to the Games Service application.
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock

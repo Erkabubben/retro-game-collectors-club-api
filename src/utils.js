@@ -1,8 +1,7 @@
 /**
- * Routes specific to the Resource Service application.
+ * Module for the Utils class.
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
- * @author Mats Loock
  * @version 1.0.0
  */
 
@@ -12,10 +11,13 @@ import dashify from 'dashify'
 import fetch from 'node-fetch'
 
 /**
- * Encapsulates a controller.
+ * Encapsulates the Utils class.
  */
- export class Utils {
-   constructor() {
+export class Utils {
+  /**
+   * Constructor for the Utils class.
+   */
+  constructor () {
     this.acceptedConsoles = {
       nes: true,
       snes: true,
@@ -31,41 +33,41 @@ import fetch from 'node-fetch'
     }
 
     this.convertedConsoleNames = {
-      'famicom': 'nes',
-      'nintendo': 'nes',
+      famicom: 'nes',
+      nintendo: 'nes',
       'nintendo entertainment system': 'nes',
       'super nintendo entertainment system': 'snes',
       'super nintendo': 'snes',
       'super famicom': 'snes',
-      'gameboy': 'gb',
+      gameboy: 'gb',
       'game boy': 'gb',
       'gameboy color': 'gbc',
       'game boy color': 'gbc',
-      'gameboycolor': 'gbc',
+      gameboycolor: 'gbc',
       'gameboy advance': 'gba',
       'game boy advance': 'gba',
-      'gameboyadvance': 'gba',
+      gameboyadvance: 'gba',
       'mega drive': 'md',
-      'megadrive': 'md',
+      megadrive: 'md',
       'sega mega drive': 'md',
       'sega megadrive': 'md',
-      'segamegadrive': 'md',
-      'nintendo64': 'n64',
+      segamegadrive: 'md',
+      nintendo64: 'n64',
       'nintendo 64': 'n64',
-      'ultra64': 'n64',
+      ultra64: 'n64',
       'ultra 64': 'n64',
-      'playstation': 'ps',
+      playstation: 'ps',
       'play station': 'ps',
-      'playstation1': 'ps',
+      playstation1: 'ps',
       'playstation 1': 'ps',
-      'psx': 'ps',
-      'playstation2': 'ps2',
+      psx: 'ps',
+      playstation2: 'ps2',
       'play station2': 'ps2',
       'play station 2': 'ps2',
       'sega dreamcast': 'dc',
-      'segadreamcast': 'dc',
+      segadreamcast: 'dc',
       'sega dream cast': 'dc',
-      'dreamcast': 'dc',
+      dreamcast: 'dc',
       'dream cast': 'dc'
     }
   }
@@ -74,6 +76,7 @@ import fetch from 'node-fetch'
    * Gets an object containing the list of links used to navigate the API.
    *
    * @param {object} req - Express request object.
+   * @param {object} localLinks - Additional links to be included in the response.
    * @returns {object} - An object containing the list of links used to navigate the API.
    */
   getLinks (req, localLinks) {
@@ -82,7 +85,8 @@ import fetch from 'node-fetch'
     const globalLinks = {
       index: ''
     }
-    if (!req.hasOwnProperty('user')) {
+    // Adds a different set of global links depending on whether the user is authenticated or not.
+    if (!Object.prototype.hasOwnProperty.call(req, 'user')) {
       globalLinks.login = 'login'
       globalLinks.register = 'register'
     } else {
@@ -95,27 +99,28 @@ import fetch from 'node-fetch'
     // Add local links.
     for (const [key, value] of Object.entries(localLinks)) {
       linksObject[key] = {}
-      linksObject[key]['href'] = fullUrl + value
+      linksObject[key].href = fullUrl + value
     }
     // Add global links.
     for (const [key, value] of Object.entries(globalLinks)) {
       linksObject[key] = {}
-      linksObject[key]['href'] = fullUrl + value
+      linksObject[key].href = fullUrl + value
     }
     // Always removes trailing slash.
-    for (const [key, value] of Object.entries(linksObject)) {
-      if (linksObject[key]['href'].length > 0 && linksObject[key]['href'].charAt(linksObject[key]['href'].length - 1) === '/') {
-        linksObject[key]['href'] = linksObject[key]['href'].substring(0, linksObject[key]['href'].length - 1);
+    for (const [key] of Object.entries(linksObject)) {
+      if (linksObject[key].href.length > 0 && linksObject[key].href.charAt(linksObject[key].href.length - 1) === '/') {
+        linksObject[key].href = linksObject[key].href.substring(0, linksObject[key].href.length - 1)
       }
     }
     return linksObject
   }
 
   /**
-   * Gets an object containing the list of links used to navigate the API.
+   * Creates a Mongoose Game model from the contents of req.body.
    *
    * @param {object} req - Express request object.
-   * @returns {object} - An object containing the list of links used to navigate the API.
+   * @param {string} resourceId - The resourceId to be given to the Game model.
+   * @returns {object} - A Mongoose Game model.
    */
   getGameModelFromRequestData (req, resourceId) {
     return new Game({
@@ -135,8 +140,7 @@ import fetch from 'node-fetch'
    * Authenticates the user by verifying the enclosed JWT.
    *
    * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
+   * @returns {boolean} - Whether or not the request's JWT has been authenticated.
    */
   authenticateJWT (req) {
     // Parses the authorization header of the request
@@ -155,7 +159,7 @@ import fetch from 'node-fetch'
       req.jwt = jwt.verify(authorization[1], publicKey)
       // Creates an object with user data based on the contents of the JWT
       req.user = {
-        email: req.jwt.email,
+        email: req.jwt.email
       }
     } catch (error) {
       return false
@@ -166,51 +170,69 @@ import fetch from 'node-fetch'
   /**
    * Authenticates the user by verifying the enclosed JWT.
    *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
+   * @param {string} webhookType - The type of Webhook to be invoked.
+   * @param {object} hookBody - JSON object that should be included as the Webhook body.
    */
   async sendWebhook (webhookType, hookBody) {
-    var registeredWebhooks = await Webhook.find({ type: webhookType })
+    const registeredWebhooks = await Webhook.find({ type: webhookType })
     for (let i = 0; i < registeredWebhooks.length; i++) {
       try {
-        const registeredWebhook = registeredWebhooks[i];
+        const registeredWebhook = registeredWebhooks[i]
         const bodyJSON = JSON.stringify(hookBody)
-        const response = await fetch(registeredWebhook.recipientUrl, {
+        await fetch(registeredWebhook.recipientUrl, {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json'
           },
           body: bodyJSON
         })
-        const responseJSON = await response.json()
       } catch (error) {
-        
+
       }
     }
   }
 
+  /**
+   * Ensures that the console defined in req.body is one of the accepted consoles. Also converts
+   * full-length console names to the proper abbreviation by checking against convertedConsoleNames
+   * object.
+   *
+   * @param {object} req - Express request object.
+   * @returns {boolean} - Whether or not the console is valid.
+   */
   validateConsole (req) {
-    if (this.convertedConsoleNames.hasOwnProperty(req.body.console.toLowerCase())) {
+    if (Object.prototype.hasOwnProperty.call(this.convertedConsoleNames, req.body.console.toLowerCase())) {
       req.body.console = this.convertedConsoleNames[req.body.console.toLowerCase()]
+      return true
     }
-    if (this.acceptedConsoles.hasOwnProperty(req.body.console.toLowerCase())) {
+    if (Object.prototype.hasOwnProperty.call(this.acceptedConsoles, req.body.console.toLowerCase())) {
+      req.body.console = req.body.console.toLowerCase()
       return true
     } else {
       return false
     }
   }
 
-  getSupportedConsolesString() {
-    var s = ''
-    for (const [key, value] of Object.entries(this.acceptedConsoles)) {
+  /**
+   * Gets all accepted consoles as a comma-separated string.
+   *
+   * @returns {string} - All accepted consoles as a comma-separated string.
+   */
+  getSupportedConsolesString () {
+    let s = ''
+    for (const [key] of Object.entries(this.acceptedConsoles)) {
       s += key + ', '
     }
     s = s.substring(0, s.length - 2)
     return s
   }
 
-  async resetDatabases(addTestData) {
+  /**
+   * Resets all databases and adds test data if the given boolean is set to true.
+   *
+   * @param {boolean} addTestData - Whether or not to add test data after database reset.
+   */
+  async resetDatabases (addTestData) {
     console.log('Resetting databases...')
     await User.deleteMany({})
     await Game.deleteMany({})
@@ -219,7 +241,7 @@ import fetch from 'node-fetch'
     const response = await fetch(process.env.AUTH_SERVICE_URI + '/api/deleteAll', {
       method: 'POST',
       headers: {
-        'Authorization': 'Bearer delete-all-from-games-service',
+        Authorization: 'Bearer delete-all-from-games-service',
         'Content-Type': 'application/json'
       }
     })
@@ -233,28 +255,28 @@ import fetch from 'node-fetch'
     if (addTestData) {
       const testUsers = [
         {
-          email: "kyle.broflowski@southparkelementary.com",
-          password: "KickTheBaby"
+          email: 'kyle.broflowski@southparkelementary.com',
+          password: 'KickTheBaby'
         },
         {
-          email: "kenny.mccormick@southparkelementary.com",
-          password: "Mrrphrmphrmmphmrrphh"
+          email: 'kenny.mccormick@southparkelementary.com',
+          password: 'Mrrphrmphrmmphmrrphh'
         },
         {
-          email: "bebe.stevens@southparkelementary.com",
-          password: "ShoesShoesShoes"
+          email: 'bebe.stevens@southparkelementary.com',
+          password: 'ShoesShoesShoes'
         },
         {
-          email: "clyde.donovan@southparkelementary.com",
-          password: "123456789101112"
+          email: 'clyde.donovan@southparkelementary.com',
+          password: '123456789101112'
         },
         {
-          email: "craig.tucker@southparkelementary.com",
-          password: "GoodTimesWithWeapons"
+          email: 'craig.tucker@southparkelementary.com',
+          password: 'GoodTimesWithWeapons'
         },
         {
-          email: "randy.marsh@tegridyfarms.com",
-          password: "_i_am_lorde_"
+          email: 'randy.marsh@tegridyfarms.com',
+          password: '_i_am_lorde_'
         }
       ]
 
@@ -364,17 +386,15 @@ import fetch from 'node-fetch'
       ]
 
       for (let i = 0; i < testUsers.length; i++) {
-        const testUser = testUsers[i];
-        const user = new User({
-          email: testUser.email,
-        })
+        const testUser = testUsers[i]
+        const user = new User({ email: testUser.email })
         await user.save()
         try {
           const bodyJSON = JSON.stringify({
             email: testUser.email,
             password: testUser.password
           })
-          const response = await fetch(process.env.AUTH_SERVICE_URI +'/api/register', {
+          await fetch(process.env.AUTH_SERVICE_URI + '/api/register', {
             method: 'POST',
             headers: {
               'Content-Type': 'application/json'
@@ -386,7 +406,7 @@ import fetch from 'node-fetch'
       }
 
       for (let i = 0; i < testGames.length; i++) {
-        const testGame = testGames[i];
+        const testGame = testGames[i]
         const gameID = testGame.console + '/' + dashify(testGame.gameTitle)
         const game = new Game({
           gameTitle: testGame.gameTitle,

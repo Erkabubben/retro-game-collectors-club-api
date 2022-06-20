@@ -1,17 +1,16 @@
 /**
- * Routes for the Images collection of the Resource Service (RESTful).
+ * Provides authentication methods for the routers.
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock
  * @version 1.0.0
  */
 
-import express from 'express'
 import createError from 'http-errors'
 import jwt from 'jsonwebtoken'
 
 /**
- * Encapsulates a controller.
+ * Encapsulates the Authentication class.
  */
 export class Authentication {
   /**
@@ -21,7 +20,7 @@ export class Authentication {
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  authenticateJWT = (req, res, next) => {
+  authenticateJWT (req, res, next) {
     // Parses the authorization header of the request
     const authorization = req.headers.authorization?.split(' ')
 
@@ -37,9 +36,7 @@ export class Authentication {
       // Verifies the JWT
       req.jwt = jwt.verify(authorization[1], publicKey)
       // Creates an object with user data based on the contents of the JWT
-      req.user = {
-        email: req.jwt.email,
-      }
+      req.user = { email: req.jwt.email }
       next()
     } catch (error) {
       // Returns an error if JWT validation fails
@@ -48,14 +45,14 @@ export class Authentication {
   }
 
   /**
-   * Ensures that the requested resource is owned by the user by checking
+   * Ensures that the requested Game is owned by the user by checking
    * the resource owner against the user specified in the JWT.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  ensureUserIsGameOwner = (req, res, next) => {
+  ensureUserIsGameOwner (req, res, next) {
     try {
       if (req.user.email !== req.game.owner) {
         throw Error
@@ -67,14 +64,14 @@ export class Authentication {
   }
 
   /**
-   * Ensures that the requested resource is owned by the user by checking
+   * Ensures that the requested Webhook is owned by the user by checking
    * the resource owner against the user specified in the JWT.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  ensureUserIsWebhookOwner = (req, res, next) => {
+  ensureUserIsWebhookOwner (req, res, next) {
     try {
       if (req.user.email !== req.webhook.owner) {
         throw Error

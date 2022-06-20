@@ -1,5 +1,5 @@
 /**
- * Routes for the Images collection of the Resource Service (RESTful).
+ * Routes for the Games collection of the Games Service (RESTful).
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock

@@ -50,22 +50,13 @@ const main = async () => {
   app.use(function (err, req, res, next) {
     err.status = err.status || 500
 
-    //if (req.app.get('env') !== 'development') {
-      res
-        .status(err.status)
-        .json({
-          status: err.status,
-          message: err.message,
-          links: req.utils.getLinks(req, {})
-        })
-      return
-    //}
-
-    // Development only!
-    // Only providing detailed error in development.
-    return res
+    res
       .status(err.status)
-      .json(err)
+      .json({
+        status: err.status,
+        message: err.message,
+        links: req.utils.getLinks(req, {})
+      })
   })
 
   if (process.env.RESET_DBS === 'true') {

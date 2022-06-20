@@ -1,5 +1,5 @@
 /**
- * Routes for the Images collection of the Resource Service (RESTful).
+ * Routes for the Webhooks collection of the Games Service (RESTful).
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock
@@ -28,7 +28,7 @@ router.post('/', auth.authenticateJWT, (req, res, next) => controller.create(req
 
 router.delete('/:id', auth.authenticateJWT, auth.ensureUserIsWebhookOwner, (req, res, next) => controller.delete(req, res, next))
 
-// Testing routes
+// Routes for Webhook testing.
 
 router.post('/hook-test-0', (req, res, next) => controller.hookTest(0, req, res, next))
 

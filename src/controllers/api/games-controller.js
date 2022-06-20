@@ -1,5 +1,5 @@
 /**
- * Module for the ImagesController.
+ * Module for the GamesController.
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock
@@ -15,7 +15,7 @@ import dashify from 'dashify'
  */
 export class GamesController {
   /**
-   * Provide req.image to the route if :id is present.
+   * Provide req.game to the route if :id is present.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -26,16 +26,13 @@ export class GamesController {
     try {
       // Get the game.
       const game = await Game.findOne({ resourceId: req.console + '/' + id })
-      
-      // If no image found send a 404 (Not Found).
+      // If no game found send a 404 (Not Found).
       if (!game) {
         next(createError(404, 'Game with id not found.'))
         return
       }
-
-      // Provide the image to req.
+      // Provide the game to req.
       req.game = game
-
       // Next middleware.
       next()
     } catch (error) {
@@ -44,17 +41,17 @@ export class GamesController {
   }
 
   /**
-   * Provide req.image to the route if :id is present.
+   * Provide req.console to the route if :console is present.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
-   * @param {string} id - The value of the id for the task to load.
+   * @param {string} console - The name of the console.
    */
-  async loadConsole (req, res, next, id) {
+  async loadConsole (req, res, next, console) {
     try {
       // Provide the console to req.
-      req.console = id
+      req.console = console
       // Next middleware.
       next()
     } catch (error) {
@@ -63,8 +60,9 @@ export class GamesController {
   }
 
   /**
-   * Takes an Game Mongoose model and returns a regular object.
+   * Takes a Game Mongoose model and returns a regular object.
    *
+   * @param {object} req - Express request object.
    * @param {Game} game - A Game Mongoose model.
    * @returns {object} - A regular object.
    */
@@ -84,8 +82,7 @@ export class GamesController {
   }
 
   /**
-   * Finds the metadata of all the images belonging to the user, and returns it as an
-   * array in a JSON response.
+   * Gets all game ads in the database and returns them as an array in a JSON response.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -111,15 +108,23 @@ export class GamesController {
     }
   }
 
+  /**
+   * Finds all game ads belonging to a specific user and returns them as an array in a JSON response.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async findPostedByUser (req, res, next) {
     try {
-      if (!req.query.hasOwnProperty('user')) {
-        const message = `'user' is missing in query.`
+      // Error response if no user is specified in query.
+      if (!Object.prototype.hasOwnProperty.call(req.query, 'user')) {
+        const message = '\'user\' is missing in query.'
         res.status(400)
         res.json({
           message: message,
           status: 400,
-          links: req.utils.getLinks(req, {}),
+          links: req.utils.getLinks(req, {})
         })
         return
       }
@@ -128,7 +133,8 @@ export class GamesController {
       games.forEach(image => {
         gameObjects.push(this.ObjectFromGameModel(req, image))
       })
-      var message = ''
+      // Set message depending on whether the owner of the game ads is the authenticated user or not.
+      let message = ''
       if (req.query.user === req.user.email) {
         message = gameObjects.length > 0 ? 'You have a total of ' + gameObjects.length + ' game ads posted.' : 'You currently have no game ads posted.'
       } else {
@@ -147,37 +153,36 @@ export class GamesController {
   }
 
   /**
-   * Finds the metadata of all the games for a certain console, and returns it as an
-   * array in a JSON response.
+   * Gets all game ads for a specific console and returns them as an array in a JSON response.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-     async findAllGamesForConsole (req, res, next) {
-      try {
-        const games = await Game.find({ console: req.console })
-        const gameObjects = []
-        games.forEach(game => {
-          gameObjects.push(this.ObjectFromGameModel(req, game))
-        })
-        const message = gameObjects.length > 0
-          ? `There are a total of ${gameObjects.length} game ads for the ${req.console} posted.`
-          : `There are currently no game ads for the ${req.console} posted.`
-        res.status(200)
-        res.json({
-          message: message,
-          status: 200,
-          links: req.utils.getLinks(req, {}),
-          resources: gameObjects
-        })
-      } catch (error) {
-        next(error)
-      }
+  async findAllGamesForConsole (req, res, next) {
+    try {
+      const games = await Game.find({ console: req.console })
+      const gameObjects = []
+      games.forEach(game => {
+        gameObjects.push(this.ObjectFromGameModel(req, game))
+      })
+      const message = gameObjects.length > 0
+        ? `There are a total of ${gameObjects.length} game ads for the ${req.console} posted.`
+        : `There are currently no game ads for the ${req.console} posted.`
+      res.status(200)
+      res.json({
+        message: message,
+        status: 200,
+        links: req.utils.getLinks(req, {}),
+        resources: gameObjects
+      })
+    } catch (error) {
+      next(error)
     }
+  }
 
   /**
-   * Finds the metadata of an image in the database and returns it as a JSON response.
+   * Finds a specific game ad in the database and returns it as a JSON response.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -197,8 +202,7 @@ export class GamesController {
   }
 
   /**
-   * Creates a new image with metadata, based on the form content. The image
-   * is stored in the Image Service, the metadata in the Resource Service database.
+   * Creates a new game ad based on the form content and stores it in the database.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -206,31 +210,32 @@ export class GamesController {
    */
   async create (req, res, next) {
     try {
-      if (!req.body.hasOwnProperty('gameTitle') || !req.body.hasOwnProperty('console')
-        || req.body.gameTitle === '' || req.body.console === '' ) {
+      // Ensure the required 'gameTitle' and 'console' properties are included and valid.
+      if (!Object.prototype.hasOwnProperty.call(req.body, 'gameTitle') || !Object.prototype.hasOwnProperty.call(req.body, 'console') ||
+        req.body.gameTitle === '' || req.body.console === '') {
         res.status(500)
         res.json({
           status: 500,
           message: 'Required fields \'gameTitle\' and \'console\' are missing.',
-          links: req.utils.getLinks(req, {}),
+          links: req.utils.getLinks(req, {})
         })
         return
       }
-
+      // Ensure the specified console is valid.
       if (!req.utils.validateConsole(req)) {
         res.status(500)
         res.json({
           status: 500,
           message: 'Console is not supported. The following consoles are supported: ' + req.utils.getSupportedConsolesString() + '.',
-          links: req.utils.getLinks(req, {}),
+          links: req.utils.getLinks(req, {})
         })
         return
       }
-
-      var gameID = req.body.console + '/' + dashify(req.body.gameTitle)
-      var game0 = await Game.find({ resourceId: gameID })
+      // Assign a unique resourceID to the game ad.
+      let gameID = req.body.console + '/' + dashify(req.body.gameTitle)
+      const game0 = await Game.find({ resourceId: gameID })
       if (game0.length > 0) {
-        var i = 1
+        let i = 1
         while (true) {
           const games = await Game.find({ resourceId: gameID + '(' + i + ')' })
           if (games.length === 0) {
@@ -241,18 +246,19 @@ export class GamesController {
         }
       }
 
+      // Validate and save the game ad.
       const game = req.utils.getGameModelFromRequestData(req, gameID)
-
       const responseGame = this.ObjectFromGameModel(req, game)
       await game.validate()
-
       await game.save()
 
+      // Send Webhook.
       req.utils.sendWebhook('on-create-game', {
         message: 'Webhook: on-create-game',
         resource: responseGame
       })
 
+      // Set response and include the newly created game ad.
       res.status(201)
       res.json({
         message: 'A new game ad was posted.',
@@ -266,8 +272,7 @@ export class GamesController {
   }
 
   /**
-   * Deletes an image from the Image Service and its image metadata
-   * from the database.
+   * Deletes a game ad from the database.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -277,6 +282,7 @@ export class GamesController {
     try {
       const gameTitle = req.game.gameTitle
       const responseGame = this.ObjectFromGameModel(req, req.game)
+      // Send Webhook.
       await req.game.delete()
       req.utils.sendWebhook('on-delete-game', {
         message: 'Webhook: on-delete-game',
@@ -295,8 +301,7 @@ export class GamesController {
   }
 
   /**
-   * Updates an image stored in the Image Service and/or image metadata
-   * stored in the database. Old database entry is replaced by new data.
+   * Updates a game ad stored in the database. Old database entry is replaced by new data.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -306,33 +311,30 @@ export class GamesController {
     try {
       const resourceId = req.game.resourceId
       const gameTitle = req.game.gameTitle
-
+      // Ensure the specified console is valid.
       if (!req.utils.validateConsole(req)) {
         res.status(500)
         res.json({
           status: 500,
           message: 'Console is not supported. The following consoles are supported: ' + req.utils.getSupportedConsolesString() + '.',
-          links: req.utils.getLinks(req, {}),
+          links: req.utils.getLinks(req, {})
         })
         return
       }
-
-      // Create a new game based on the form contents
+      // Create a new game ad based on the req.body contents and validate.
       const newGame = req.utils.getGameModelFromRequestData(req, resourceId)
-
       await newGame.validate()
-
-      // Delete the original game metadata stored in the database
+      // Delete the original game metadata stored in the database.
       await req.game.delete()
-
+      // Save the new game ad to the database.
       await newGame.save()
-
+      // Send Webhook.
       const responseGame = this.ObjectFromGameModel(req, req.game)
       req.utils.sendWebhook('on-update-game', {
         message: 'Webhook: on-update-game',
         resource: responseGame
       })
-
+      // Include updated game ad in response.
       res
         .status(200)
         .json({

@@ -1,13 +1,12 @@
 /**
- * Module for the ImagesController.
+ * Module for the APIController.
  *
  * @author Erik Lindholm <elimk06@student.lnu.se>
  * @author Mats Loock
  * @version 1.0.0
  */
 
-import { Game, User } from '../../models/games-service.js'
-import createError from 'http-errors'
+import { User } from '../../models/games-service.js'
 import fetch from 'node-fetch'
 
 /**
@@ -15,8 +14,7 @@ import fetch from 'node-fetch'
  */
 export class APIController {
   /**
-   * Finds the metadata of all the images belonging to the user, and returns it as an
-   * array in a JSON response.
+   * The API entry point, which returns a 'Welcome' message along with links.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -25,21 +23,27 @@ export class APIController {
   async index (req, res, next) {
     if (req.utils.authenticateJWT(req)) {
       res.json({
-          message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently logged in as ' + req.user.email + '.)',
-          links: req.utils.getLinks(req, {
-              myAccount: 'me',
-          })
+        message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently logged in as ' + req.user.email + '.)',
+        links: req.utils.getLinks(req, {})
       })
     } else {
       res.json({
-          message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently not logged in.)',
-          links: req.utils.getLinks(req, {})
+        message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently not logged in.)',
+        links: req.utils.getLinks(req, {})
       })
     }
     next()
   }
 
+  /**
+   * Registers a new user.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
   async register (req, res, next) {
+    // Ensures user is not already registered.
     const existingUser = await User.findOne({ email: req.body.email })
     if (existingUser !== null) {
       res.status(409)
@@ -50,7 +54,8 @@ export class APIController {
       })
       return
     }
-    if (!req.body.hasOwnProperty('password') || req.body.password.length < 10 || req.body.password.length > 1000) {
+    // Ensures provided password is valid.
+    if (!Object.prototype.hasOwnProperty.call(req.body, 'password') || req.body.password.length < 10 || req.body.password.length > 1000) {
       res.status(400)
       res.json({
         message: 'A password with a length of at least 10 and no more than 1000 characters needs to be provided.',
@@ -59,9 +64,8 @@ export class APIController {
       })
       return
     }
-    const user = new User({
-      email: req.body.email,
-    })
+    // Creates and validates a new user.
+    const user = new User({ email: req.body.email })
     try {
       await user.validate()
     } catch (error) {
@@ -69,11 +73,12 @@ export class APIController {
       return
     }
     try {
+      // Attempts to register user credentials at the Auth service.
       const bodyJSON = JSON.stringify({
         email: req.body.email,
         password: req.body.password
       })
-      const response = await fetch(process.env.AUTH_SERVICE_URI +'/api/register', {
+      const response = await fetch(process.env.AUTH_SERVICE_URI + '/api/register', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json'
@@ -81,7 +86,7 @@ export class APIController {
         body: bodyJSON
       })
       const responseJSON = await response.json()
-      console.log(responseJSON)
+      // Save user if Auth service response is OK.
       if (responseJSON.status === 200 || responseJSON.status === 201) {
         await user.save()
         res.json(responseJSON)
@@ -89,7 +94,6 @@ export class APIController {
       }
     } catch (error) {
       next(error)
-      return
     }
   }
 }

@@ -77,15 +77,15 @@ const userSchema = new mongoose.Schema({
   },
   username: {
     type: String,
-    //required: '`{PATH}` is required!',
+    // required: '`{PATH}` is required!',
     trim: true,
-    //unique: [true, '`{PATH}` is not unique!'],
+    // unique: [true, '`{PATH}` is not unique!'],
     maxLength: [100, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
     minLength: [3, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
   },
   city: {
     type: String,
-    //required: '`{PATH}` is required!',
+    // required: '`{PATH}` is required!',
     trim: true,
     maxLength: [1000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAXLENGTH}) characters.'],
     minLength: [1, '`{PATH}` ({VALUE}) is beneath the limit ({MINLENGTH}) characters.']
@@ -93,7 +93,7 @@ const userSchema = new mongoose.Schema({
   profileBody: {
     type: String,
     trim: true,
-    maxLength: [2000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAX}).'],
+    maxLength: [2000, '`{PATH}` ({VALUE}) exceeds the limit of ({MAX}).']
   },
   imageUrl: {
     type: String,
