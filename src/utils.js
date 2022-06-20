@@ -6,7 +6,6 @@
  * @version 1.0.0
  */
 
-import express from 'express'
 import jwt from 'jsonwebtoken'
 import { Game, Webhook } from './models/games-service.js'
 import dashify from 'dashify'
@@ -16,6 +15,61 @@ import fetch from 'node-fetch'
  * Encapsulates a controller.
  */
  export class Utils {
+   constructor() {
+    this.acceptedConsoles = {
+      nes: true,
+      snes: true,
+      gb: true,
+      gbc: true,
+      gba: true,
+      md: true,
+      n64: true,
+      ps: true,
+      ps2: true,
+      dc: true,
+      pc: true
+    }
+
+    this.convertedConsoleNames = {
+      'famicom': 'nes',
+      'nintendo': 'nes',
+      'nintendo entertainment system': 'nes',
+      'super nintendo entertainment system': 'snes',
+      'super nintendo': 'snes',
+      'super famicom': 'snes',
+      'gameboy': 'gb',
+      'game boy': 'gb',
+      'gameboy color': 'gbc',
+      'game boy color': 'gbc',
+      'gameboycolor': 'gbc',
+      'gameboy advance': 'gba',
+      'game boy advance': 'gba',
+      'gameboyadvance': 'gba',
+      'mega drive': 'md',
+      'megadrive': 'md',
+      'sega mega drive': 'md',
+      'sega megadrive': 'md',
+      'segamegadrive': 'md',
+      'nintendo64': 'n64',
+      'nintendo 64': 'n64',
+      'ultra64': 'n64',
+      'ultra 64': 'n64',
+      'playstation': 'ps',
+      'play station': 'ps',
+      'playstation1': 'ps',
+      'playstation 1': 'ps',
+      'psx': 'ps',
+      'playstation2': 'ps2',
+      'play station2': 'ps2',
+      'play station 2': 'ps2',
+      'sega dreamcast': 'dc',
+      'segadreamcast': 'dc',
+      'sega dream cast': 'dc',
+      'dreamcast': 'dc',
+      'dream cast': 'dc'
+    }
+  }
+
   /**
    * Gets an object containing the list of links used to navigate the API.
    *
@@ -116,19 +170,43 @@ import fetch from 'node-fetch'
    * @param {object} res - Express response object.
    * @param {Function} next - Express next middleware function.
    */
-  async sendWebhook (req, webhookType, hookBody) {
-    var registeredWebhooks = await Webhook.find({ owner: req.user.email, type: webhookType })
+  async sendWebhook (webhookType, hookBody) {
+    var registeredWebhooks = await Webhook.find({ type: webhookType })
     for (let i = 0; i < registeredWebhooks.length; i++) {
-      const registeredWebhook = registeredWebhooks[i];
-      const bodyJSON = JSON.stringify(hookBody)
-      const response = await fetch(registeredWebhook.recipientUrl, {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: bodyJSON
-      })
-      const responseJSON = await response.json()
+      try {
+        const registeredWebhook = registeredWebhooks[i];
+        const bodyJSON = JSON.stringify(hookBody)
+        const response = await fetch(registeredWebhook.recipientUrl, {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json'
+          },
+          body: bodyJSON
+        })
+        const responseJSON = await response.json()
+      } catch (error) {
+        
+      }
     }
+  }
+
+  validateConsole (req) {
+    if (this.convertedConsoleNames.hasOwnProperty(req.body.console.toLowerCase())) {
+      req.body.console = this.convertedConsoleNames[req.body.console.toLowerCase()]
+    }
+    if (this.acceptedConsoles.hasOwnProperty(req.body.console.toLowerCase())) {
+      return true
+    } else {
+      return false
+    }
+  }
+
+  getSupportedConsolesString() {
+    var s = ''
+    for (const [key, value] of Object.entries(this.acceptedConsoles)) {
+      s += key + ', '
+    }
+    s = s.substring(0, s.length - 2)
+    return s
   }
 }

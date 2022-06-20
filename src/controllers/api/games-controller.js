@@ -183,6 +183,16 @@ export class GamesController {
         return
       }
 
+      if (!req.utils.validateConsole(req)) {
+        res.status(500)
+        res.json({
+          status: 500,
+          message: 'Console is not supported. The following consoles are supported: ' + req.utils.getSupportedConsolesString() + '.',
+          links: req.utils.getLinks(req, {}),
+        })
+        return
+      }
+
       var gameID = dashify(req.body.console) + '/' + dashify(req.body.gameTitle)
       var game0 = await Game.find({ resourceId: gameID })
       if (game0.length > 0) {
@@ -204,7 +214,7 @@ export class GamesController {
 
       await game.save()
 
-      req.utils.sendWebhook(req, 'on-create-game', {
+      req.utils.sendWebhook('on-create-game', {
         message: 'Webhook: on-create-game',
         resource: responseGame
       })
@@ -232,7 +242,12 @@ export class GamesController {
   async delete (req, res, next) {
     try {
       const gameTitle = req.game.gameTitle
+      const responseGame = this.ObjectFromGameModel(req, req.game)
       await req.game.delete()
+      req.utils.sendWebhook('on-delete-game', {
+        message: 'Webhook: on-delete-game',
+        resource: responseGame
+      })
       res
         .status(200)
         .json({
@@ -258,6 +273,16 @@ export class GamesController {
       const resourceId = req.game.resourceId
       const gameTitle = req.game.gameTitle
 
+      if (!req.utils.validateConsole(req)) {
+        res.status(500)
+        res.json({
+          status: 500,
+          message: 'Console is not supported. The following consoles are supported: ' + req.utils.getSupportedConsolesString() + '.',
+          links: req.utils.getLinks(req, {}),
+        })
+        return
+      }
+
       // Create a new game based on the form contents
       const newGame = req.utils.getGameModelFromRequestData(req, resourceId)
 
@@ -268,6 +293,12 @@ export class GamesController {
 
       await newGame.save()
 
+      const responseGame = this.ObjectFromGameModel(req, req.game)
+      req.utils.sendWebhook('on-update-game', {
+        message: 'Webhook: on-update-game',
+        resource: responseGame
+      })
+
       res
         .status(200)
         .json({
@@ -276,51 +307,6 @@ export class GamesController {
           links: req.utils.getLinks(req, {}),
           resource: this.ObjectFromGameModel(req, newGame)
         })
-    } catch (error) {
-      next(error)
-    }
-  }
-
-  /**
-   * Partially updates an image stored in the Image Service and/or image metadata
-   * stored in the database.
-   *
-   * @param {object} req - Express request object.
-   * @param {object} res - Express response object.
-   * @param {Function} next - Express next middleware function.
-   */
-  async partialUpdate (req, res, next) {
-    try {
-      // Only make PUT request to image service if input data contains data and contentType
-      if ((req.body.data !== undefined && req.body.data !== null) && (req.body.contentType !== undefined && req.body.contentType !== null)) {
-        // Make PUT request to Image Service
-        const body = {
-          data: req.body.data,
-          contentType: req.body.contentType
-        }
-
-        const response = await this.ImageServiceFetchRequest('put', 'images/' + req.image._id, body)
-
-        if (response.status !== 204) {
-          throw Error
-        }
-      }
-
-      // Update description and location if they have been defined in the input data
-      if (req.body.description !== undefined && req.body.description !== null) {
-        req.image.description = req.body.description
-      }
-
-      if (req.body.location !== undefined && req.body.location !== null) {
-        req.image.location = req.body.location
-      }
-
-      // Save updated image metadata to database
-      await req.image.save()
-
-      res
-        .status(204)
-        .json()
     } catch (error) {
       next(error)
     }
