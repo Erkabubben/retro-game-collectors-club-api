@@ -94,12 +94,47 @@ export class GamesController {
    */
   async findAll (req, res, next) {
     try {
-      const games = await Game.find({ owner: req.user.email })
+      const games = await Game.find({})
       const gameObjects = []
       games.forEach(image => {
         gameObjects.push(this.ObjectFromGameModel(req, image))
       })
-      const message = gameObjects.length > 0 ? 'You have a total of ' + gameObjects.length + ' game ads posted.' : 'You currently have no game ads posted.'
+      const message = gameObjects.length > 0 ? 'There are a total of ' + gameObjects.length + ' game ads posted.' : 'There are currently no game ads posted.'
+      res.status(200)
+      res.json({
+        message: message,
+        status: 200,
+        links: req.utils.getLinks(req, {}),
+        resources: gameObjects
+      })
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  async findPostedByUser (req, res, next) {
+    try {
+      if (!req.query.hasOwnProperty('user')) {
+        const message = `'user' is missing in query.`
+        res.status(400)
+        res.json({
+          message: message,
+          status: 400,
+          links: req.utils.getLinks(req, {}),
+        })
+        return
+      }
+      const games = await Game.find({ owner: req.query.user })
+      const gameObjects = []
+      games.forEach(image => {
+        gameObjects.push(this.ObjectFromGameModel(req, image))
+      })
+      var message = ''
+      if (req.query.user === req.user.email) {
+        message = gameObjects.length > 0 ? 'You have a total of ' + gameObjects.length + ' game ads posted.' : 'You currently have no game ads posted.'
+      } else {
+        message = gameObjects.length > 0 ? `There are a total of ${gameObjects.length} game ads posted by ${req.query.user}.` : `${req.query.user} currently have no game ads posted.`
+      }
       res.status(200)
       res.json({
         message: message,

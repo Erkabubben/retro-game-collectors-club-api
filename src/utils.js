@@ -86,8 +86,8 @@ import fetch from 'node-fetch'
       globalLinks.login = 'login'
       globalLinks.register = 'register'
     } else {
-      globalLinks.myPostedGames = 'games/' + req.user.email
-      globalLinks.gamesPostedByUser = 'games/{user}'
+      globalLinks.myPostedGames = 'games/' + 'findPostedByUser?user=' + req.user.email
+      globalLinks.gamesPostedByUser = 'games/findPostedByUser?user={user}'
       globalLinks.currentlyPostedGames = 'games'
       globalLinks.currentlyPostedGamesForConsole = 'games/{console}'
       globalLinks.webhooks = 'webhooks'
