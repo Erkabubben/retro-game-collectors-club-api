@@ -68,6 +68,14 @@ const main = async () => {
       .json(err)
   })
 
+  if (process.env.RESET_DBS === 'true') {
+    if (process.env.ADD_TESTDATA === 'true') {
+      utils.resetDatabases(true)
+    } else {
+      utils.resetDatabases(false)
+    }
+  }
+
   // Starts the HTTP server listening for connections.
   app.listen(process.env.PORT, () => {
     console.log(`Server running at http://localhost:${process.env.PORT}`)

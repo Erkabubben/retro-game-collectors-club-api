@@ -17,17 +17,10 @@ const auth = new Authentication()
 const controller = new WebhooksController()
 
 // Map HTTP verbs and route paths to controller actions.
-// router.param('console', (req, res, next, id) => controller.loadConsole(req, res, next, id))
 
 router.param('id', (req, res, next, id) => controller.loadWebhook(req, res, next, id))
 
 router.get('/', auth.authenticateJWT, (req, res, next) => controller.getCurrentUserWebhooks(req, res, next))
-
-/*router.get('/:console', auth.authenticateJWT, (req, res, next) => controller.findAllGamesForConsole(req, res, next))
-
-router.get('/:console/:id', auth.authenticateJWT, (req, res, next) => controller.findGame(req, res, next))
-
-router.get('/:console/:id', auth.authenticateJWT, (req, res, next) => controller.findGame(req, res, next))*/
 
 router.get('/:id', auth.authenticateJWT, auth.ensureUserIsWebhookOwner, (req, res, next) => controller.findWebhook(req, res, next))
 
@@ -35,5 +28,8 @@ router.post('/', auth.authenticateJWT, (req, res, next) => controller.create(req
 
 router.delete('/:id', auth.authenticateJWT, auth.ensureUserIsWebhookOwner, (req, res, next) => controller.delete(req, res, next))
 
+// Testing routes
+
 router.post('/hook-test-0', (req, res, next) => controller.hookTest(0, req, res, next))
+
 router.post('/hook-test-1', (req, res, next) => controller.hookTest(1, req, res, next))

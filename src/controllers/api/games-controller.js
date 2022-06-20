@@ -6,10 +6,9 @@
  * @version 1.0.0
  */
 
-import { Game, Webhook } from '../../models/games-service.js'
+import { Game } from '../../models/games-service.js'
 import createError from 'http-errors'
 import dashify from 'dashify'
-import fetch from 'node-fetch'
 
 /**
  * Encapsulates a controller.
@@ -228,7 +227,7 @@ export class GamesController {
         return
       }
 
-      var gameID = dashify(req.body.console) + '/' + dashify(req.body.gameTitle)
+      var gameID = req.body.console + '/' + dashify(req.body.gameTitle)
       var game0 = await Game.find({ resourceId: gameID })
       if (game0.length > 0) {
         var i = 1

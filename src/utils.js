@@ -7,7 +7,7 @@
  */
 
 import jwt from 'jsonwebtoken'
-import { Game, Webhook } from './models/games-service.js'
+import { User, Game, Webhook } from './models/games-service.js'
 import dashify from 'dashify'
 import fetch from 'node-fetch'
 
@@ -208,5 +208,35 @@ import fetch from 'node-fetch'
     }
     s = s.substring(0, s.length - 2)
     return s
+  }
+
+  async resetDatabases(addTestData) {
+    console.log('Resetting databases...')
+    await User.deleteMany({})
+    await Game.deleteMany({})
+    await Webhook.deleteMany({})
+    console.log('All data on games-service databases was deleted.')
+    const response = await fetch('http://localhost:8081/api/deleteAll', {
+      method: 'POST',
+      headers: {
+        'Authorization': 'Bearer delete-all-from-games-service',
+        'Content-Type': 'application/json'
+      }
+    })
+    const responseJSON = await response.json()
+    if (responseJSON.status === 200) {
+      console.log(responseJSON.message)
+    } else {
+      console.log(responseJSON)
+    }
+
+    if (addTestData) {
+      const testUsers = [
+        {
+          email: "kyle.broflowski@southparkelementary.com",
+          password: "KickTheBaby"
+        }
+      ]
+    }
   }
 }
