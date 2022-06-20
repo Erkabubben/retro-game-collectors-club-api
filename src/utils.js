@@ -120,7 +120,7 @@ import fetch from 'node-fetch'
   getGameModelFromRequestData (req, resourceId) {
     return new Game({
       gameTitle: req.body.gameTitle,
-      console: dashify(req.body.console),
+      console: req.body.console,
       condition: req.body.condition,
       imageUrl: req.body.imageUrl,
       city: req.body.city,
@@ -235,8 +235,174 @@ import fetch from 'node-fetch'
         {
           email: "kyle.broflowski@southparkelementary.com",
           password: "KickTheBaby"
+        },
+        {
+          email: "kenny.mccormick@southparkelementary.com",
+          password: "Mrrphrmphrmmphmrrphh"
+        },
+        {
+          email: "bebe.stevens@southparkelementary.com",
+          password: "ShoesShoesShoes"
+        },
+        {
+          email: "clyde.donovan@southparkelementary.com",
+          password: "123456789101112"
+        },
+        {
+          email: "craig.tucker@southparkelementary.com",
+          password: "GoodTimesWithWeapons"
+        },
+        {
+          email: "randy.marsh@tegridyfarms.com",
+          password: "_i_am_lorde_"
         }
       ]
+
+      const testGames = [
+        {
+          gameTitle: 'The Legend of Zelda: Ocarina of Time',
+          console: 'n64',
+          condition: 3,
+          imageUrl: 'https://en.wikipedia.org/wiki/The_Legend_of_Zelda:_Ocarina_of_Time#/media/File:The_Legend_of_Zelda_Ocarina_of_Time.jpg',
+          price: 25,
+          description: 'A true classic',
+          owner: 'clyde.donovan@southparkelementary.com'
+        },
+        {
+          gameTitle: 'GoldenEye 007',
+          console: 'n64',
+          condition: 3,
+          imageUrl: 'https://en.wikipedia.org/wiki/GoldenEye_007_(1997_video_game)#/media/File:GoldenEye007box.jpg',
+          price: 32,
+          owner: 'randy.marsh@tegridyfarms.com'
+        },
+        {
+          gameTitle: 'Final Fantasy VII',
+          console: 'ps',
+          condition: 4,
+          imageUrl: 'https://en.wikipedia.org/wiki/Final_Fantasy_VII#/media/File:Final_Fantasy_VII_Box_Art.jpg',
+          price: 55,
+          owner: 'kyle.broflowski@southparkelementary.com'
+        },
+        {
+          gameTitle: 'Super Mario World',
+          console: 'snes',
+          condition: 5,
+          imageUrl: 'https://en.wikipedia.org/wiki/Super_Mario_World#/media/File:Super_Mario_World_Coverart.png',
+          price: 80,
+          owner: 'kyle.broflowski@southparkelementary.com'
+        },
+        {
+          gameTitle: 'Flashback',
+          console: 'snes',
+          condition: 1,
+          imageUrl: 'http://www.retrospelbutiken.se/images/products/10585.jpg',
+          description: 'Label has been torn off from casette, but works fine.',
+          price: 15,
+          owner: 'craig.tucker@southparkelementary.com'
+        },
+        {
+          gameTitle: 'Silent Hill',
+          console: 'ps',
+          condition: 1,
+          imageUrl: 'https://en.wikipedia.org/wiki/Silent_Hill_%28video_game%29#/media/File:Silent_Hill_video_game_cover.png',
+          description: 'The scariest game for the original Playstation.',
+          price: 15,
+          owner: 'randy.marsh@tegridyfarms.com'
+        },
+        {
+          gameTitle: 'Mario Kart 64',
+          console: 'n64',
+          condition: 4,
+          imageUrl: 'https://en.wikipedia.org/wiki/Mario_Kart_64#/media/File:Mario_Kart_64.jpg',
+          description: 'Watch out for blue shells!',
+          price: 25,
+          owner: 'bebe.stevens@southparkelementary.com'
+        },
+        {
+          gameTitle: 'Jet Force Gemini',
+          console: 'n64',
+          condition: 3,
+          imageUrl: 'https://en.wikipedia.org/wiki/Jet_Force_Gemini#/media/File:Jet_Force_Gemini_box.jpg',
+          price: 40,
+          owner: 'kyle.broflowski@southparkelementary.com'
+        },
+        {
+          gameTitle: 'The Guardian Legend',
+          console: 'nes',
+          condition: 5,
+          imageUrl: 'https://en.wikipedia.org/wiki/The_Guardian_Legend#/media/File:TGL_Box.jpg',
+          description: 'Great game in near-mint condition.',
+          price: 200,
+          owner: 'kyle.broflowski@southparkelementary.com'
+        },
+        {
+          gameTitle: 'StarTropics',
+          console: 'nes',
+          condition: 3,
+          imageUrl: 'https://en.wikipedia.org/wiki/StarTropics#/media/File:Startropics_box.jpg',
+          description: 'Includes the letter with the secret code necessary to use the Sub-C.',
+          price: 100,
+          owner: 'clyde.donovan@southparkelementary.com'
+        },
+        {
+          gameTitle: 'Willow',
+          console: 'nes',
+          condition: 4,
+          imageUrl: 'https://en.wikipedia.org/wiki/Willow_(Capcom_arcade_game)#/media/File:Willow_arcade_flyer.jpg',
+          price: 80,
+          owner: 'clyde.donovan@southparkelementary.com'
+        },
+        {
+          gameTitle: "Fester's Quest",
+          console: 'nes',
+          condition: 2,
+          imageUrl: 'https://en.wikipedia.org/wiki/Fester%27s_Quest#/media/File:FestersQuest.jpg',
+          price: 40,
+          owner: 'clyde.donovan@southparkelementary.com'
+        }
+      ]
+
+      for (let i = 0; i < testUsers.length; i++) {
+        const testUser = testUsers[i];
+        const user = new User({
+          email: testUser.email,
+        })
+        await user.save()
+        try {
+          const bodyJSON = JSON.stringify({
+            email: testUser.email,
+            password: testUser.password
+          })
+          const response = await fetch('http://localhost:8081/api/register', {
+            method: 'POST',
+            headers: {
+              'Content-Type': 'application/json'
+            },
+            body: bodyJSON
+          })
+          console.log(`Added user '${testUser.email}' to database.`)
+        } catch (error) {}
+      }
+
+      for (let i = 0; i < testGames.length; i++) {
+        const testGame = testGames[i];
+        const gameID = testGame.console + '/' + dashify(testGame.gameTitle)
+        const game = new Game({
+          gameTitle: testGame.gameTitle,
+          console: testGame.console,
+          condition: testGame.condition,
+          imageUrl: testGame.imageUrl,
+          price: testGame.price,
+          description: testGame.description,
+          owner: testGame.owner,
+          resourceId: gameID
+        })
+        await game.save()
+        console.log(`Added game '${gameID}' to database.`)
+      }
+
+      console.log('Finished adding test data.')
     }
   }
 }
