@@ -34,3 +34,6 @@ router.get('/:id', auth.authenticateJWT, auth.ensureUserIsWebhookOwner, (req, re
 router.post('/', auth.authenticateJWT, (req, res, next) => controller.create(req, res, next))
 
 router.delete('/:id', auth.authenticateJWT, auth.ensureUserIsWebhookOwner, (req, res, next) => controller.delete(req, res, next))
+
+router.post('/hook-test-0', (req, res, next) => controller.hookTest(0, req, res, next))
+router.post('/hook-test-1', (req, res, next) => controller.hookTest(1, req, res, next))

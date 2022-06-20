@@ -160,16 +160,16 @@ export class WebhooksController {
    */
   async findWebhook (req, res, next) {
     try {
-        res.status(200)
-        res.json({
-          status: 200,
-          resource: this.ObjectFromWebhookModel(req, req.webhook),
-          links: req.linksUtil.getLinks(req, {})
-        })
-      } catch (error) {
-        next(error)
-      }
+      res.status(200)
+      res.json({
+        status: 200,
+        resource: this.ObjectFromWebhookModel(req, req.webhook),
+        links: req.linksUtil.getLinks(req, {})
+      })
+    } catch (error) {
+      next(error)
     }
+  }
 
   /**
    * Deletes an image from the Image Service and its image metadata
@@ -193,6 +193,29 @@ export class WebhooksController {
             links: req.linksUtil.getLinks(req, {})
           })
       }
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Creates a new image with metadata, based on the form content. The image
+   * is stored in the Image Service, the metadata in the Resource Service database.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async hookTest (testID, req, res, next) {
+    try {
+      const message = `Webhook received on test route ${testID}: ` + req
+      console.log(`Webhook received on test route ${testID}: `)
+      console.log(req.body)
+      res.status(200)
+      res.json({
+        message: message,
+        status: 200
+      })
     } catch (error) {
       next(error)
     }

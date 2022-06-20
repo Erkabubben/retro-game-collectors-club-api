@@ -6,7 +6,7 @@
  * @version 1.0.0
  */
 
-import { Game } from '../../models/games-service.js'
+import { Game, Webhook } from '../../models/games-service.js'
 import createError from 'http-errors'
 import dashify from 'dashify'
 import fetch from 'node-fetch'
@@ -204,12 +204,10 @@ export class GamesController {
 
       await game.save()
 
-      //
-      var registeredWebhooks = await Webhook.find({ type: 'on-create-game' })
-      registeredWebhooks.forEach(registeredWebhook => {
-        
+      req.linksUtil.sendWebhook(req, 'on-create-game', {
+        message: 'Webhook: on-create-game',
+        resource: responseGame
       })
-      //
 
       res.status(201)
       res.json({

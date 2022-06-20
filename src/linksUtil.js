@@ -8,8 +8,9 @@
 
 import express from 'express'
 import jwt from 'jsonwebtoken'
-import { Game } from './models/games-service.js'
+import { Game, Webhook } from './models/games-service.js'
 import dashify from 'dashify'
+import fetch from 'node-fetch'
 
 /**
  * Encapsulates a controller.
@@ -106,5 +107,28 @@ import dashify from 'dashify'
       return false
     }
     return true
+  }
+
+  /**
+   * Authenticates the user by verifying the enclosed JWT.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   */
+  async sendWebhook (req, webhookType, hookBody) {
+    var registeredWebhooks = await Webhook.find({ owner: req.user.email, type: webhookType })
+    for (let i = 0; i < registeredWebhooks.length; i++) {
+      const registeredWebhook = registeredWebhooks[i];
+      const bodyJSON = JSON.stringify(hookBody)
+      const response = await fetch(registeredWebhook.recipientUrl, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: bodyJSON
+      })
+      const responseJSON = await response.json()
+    }
   }
 }
