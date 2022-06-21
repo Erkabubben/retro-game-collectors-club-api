@@ -50,13 +50,13 @@ const main = async () => {
   app.use(function (err, req, res, next) {
     err.status = err.status || 500
 
-    res
-      .status(err.status)
-      .json({
-        status: err.status,
-        message: err.message,
-        links: req.utils.getLinks(req, {})
-      })
+    return res
+    .status(err.status)
+    .json({
+      status: err.status,
+      message: err.message,
+      links: req.utils.getLinks(req, {})
+    })
   })
 
   if (process.env.RESET_DBS === 'true') {

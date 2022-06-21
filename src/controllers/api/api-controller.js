@@ -22,17 +22,20 @@ export class APIController {
    */
   async index (req, res, next) {
     if (req.utils.authenticateJWT(req)) {
+      res.status(200)
       res.json({
+        status: 200,
         message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently logged in as ' + req.user.email + '.)',
         links: req.utils.getLinks(req, {})
       })
     } else {
+      res.status(200)
       res.json({
+        status: 200,
         message: 'Welcome to the LNU Game Collectors Club API! Please use the links to navigate (you are currently not logged in.)',
         links: req.utils.getLinks(req, {})
       })
     }
-    next()
   }
 
   /**
@@ -96,4 +99,58 @@ export class APIController {
       next(error)
     }
   }
+
+  /**
+   * Gets all accepted consoles as a comma-separated string.
+   *
+   * @returns {string} - All accepted consoles as a comma-separated string.
+   */
+   async redirectReqThenRes (req, res, next, url) {
+    try {
+      const JSONbody = await JSON.stringify(req.body)
+      const response = await fetch(url, {
+        method: req.method,
+        headers: req.headers,
+        body: req.method === 'GET' ? undefined : JSONbody
+      })
+      const responseJSON = await response.json()
+      res
+        .status(response.status)
+        .json(responseJSON)
+    } catch (error) {
+      next(error)
+    }
+  }
+
+  /**
+   * Resets all databases and adds test data if the given boolean is set to true.
+   *
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @param {boolean} addTestData - Whether or not to add test data after database reset.
+   */
+    async resetDatabases (req, res, next, addTestData) {
+      try {
+        // Parses the authorization header of the request
+        const authorization = req.headers.authorization?.split(' ')
+        if (authorization?.[0] !== 'Bearer') {
+          console.log('Bearer token is missing.')
+          throw new Error()
+        } else if (authorization[1] !== 'you-bastard') {
+          console.log('Wrong bearer token.')
+          throw new Error()
+        }
+        req.utils.resetDatabases(addTestData)
+        // Send response.
+        res
+          .status(200)
+          .json({
+            status: 200,
+            message: addTestData ? 'Databases were successfully reset to test data.' : 'Databases were successfully reset to empty.' 
+          })
+      } catch (error) {
+        next(error)
+      }
+    }
 }

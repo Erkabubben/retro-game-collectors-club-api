@@ -1,0 +1,1660 @@
+{
+	"info": {
+		"_postman_id": "4b849134-0022-4f79-b986-568c3141b679",
+		"name": "Production Games Service",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Login / Register",
+			"item": [
+				{
+					"name": "Login",
+					"item": [
+						{
+							"name": "Bad",
+							"item": [
+								{
+									"name": "Login No Email",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"password\": \"ManBearPig\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Login No Password",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"kenny.mccormick@southparkelementary.com\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"login"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Login Wrong Password",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"kenny.mccormick@southparkelementary.com\",\r\n    \"password\": \"abcdefghijklmnopqrs\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"login"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Login (Stan)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"stan.marsh@southparkelementary.com\",\r\n    \"password\": \"ManBearPig\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login (Kenny)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"kenny.mccormick@southparkelementary.com\",\r\n    \"password\": \"Mrrphrmphrmmphmrrphh\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login (Butters)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"leopold.stotch@southparkelementary.com\",\r\n    \"password\": \"lemmywinks\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login (Wendy)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"wendy.testaburger@southparkelementary.com\",\r\n    \"password\": \"Stark's Pond\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Login (Cartman)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"eric.cartman@southparkelementary.com\",\r\n    \"password\": \"SUCKMYBALLS\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/login",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"login"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Register",
+					"item": [
+						{
+							"name": "Bad",
+							"item": [
+								{
+									"name": "Register No Email",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"password\": \"SUCKMYBALLS\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Register Existing User",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"kenny.mccormick@southparkelementary.com\",\r\n    \"password\": \"Mrrphrmphrmmphmrrphh\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Register No Password",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"eric.cartman@southparkelementary.com\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Register Too Short Password",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"eric.cartman@southparkelementary.com\",\r\n    \"password\": \"BALLS\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"register"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Register Too Long Password",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"email\": \"eric.cartman@southparkelementary.com\",\r\n    \"password\": \"WEEELL Kyle mom's a bitch she's a big fat bitch, she's the biggest bitch in the whole wide world she's a stupid bitch if there ever was a bitch, she's a bitch to all the boys and girls! On Monday she's a bitch, on Tuesday she's a bitch, on Wensday though Saturday she's a bitch, then on Sunday just to be different she's a super King Kamehameha beeeotch! Have you ever met my friend Kyle's mom she's the biggest bitch in the whole wide world she's a mean old bitch and she has stupid hair she's a bitch bitch bitch bitch bitch bitch bitch bitch she's a stupid bitch! Kyle's mom's a bitch and she's just a dirty bitch! Talk to kids around the world and it might go a little bit somethin' like this: (Chinese kids) (French kids)(Dutch kids) (African kids) Have you ever met my friend Kyle's mom she's the biggest bitch in the whole wide world she's a mean old bitch and she has stupid hair, she's a bitch bitch bitch bitch bitch bitch bitch Bitch bitch bitch bitch bitch bitch bitch bitch, she's stupid bitch Kyle's mom's a bitch and she's just a dirty bitch! I really mean it Kyle's mom, Is a big fat fucking bitch! Kyle's mom, yeah! chaaa!\"\r\n}\r\n",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"register"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Register (Stan)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"stan.marsh@southparkelementary.com\",\r\n    \"password\": \"ManBearPig\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register (Butters)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"leopold.stotch@southparkelementary.com\",\r\n    \"password\": \"lemmywinks\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register (Wendy)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"wendy.testaburger@southparkelementary.com\",\r\n    \"password\": \"Stark's Pond\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Register (Cartman)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"email\": \"eric.cartman@southparkelementary.com\",\r\n    \"password\": \"SUCKMYBALLS\"\r\n}\r\n",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/register",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"register"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				}
+			]
+		},
+		{
+			"name": "Authenticated Requests",
+			"item": [
+				{
+					"name": "Bad",
+					"item": [
+						{
+							"name": "Update To Non-Supported Console (Chrono Trigger)",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"gameTitle\": \"Chrono Trigger\",\r\n    \"console\": \"xbox360\",\r\n    \"condition\": 1,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Chrono_Trigger#/media/File:Chrono_Trigger.jpg\",\r\n    \"price\": 3,\r\n    \"description\": \"I spilled coffee all over the box and manual... but it's still one of the best RPG's ever made!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger(1)",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games",
+										"snes",
+										"chrono-trigger(1)"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Non-Existent",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/nes/resident-evil-4",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games",
+										"nes",
+										"resident-evil-4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Without Title (Mega Man III)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"console\": \"NES\",\r\n    \"condition\": 3,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Mega_Man_3#/media/File:Megaman3_box.jpg\",\r\n    \"description\": \"The box and manual has some minor scratches. Arguably the best of the Mega Man titles released for the NES - definitely has the best soundtrack!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Without Console (Mega Man III)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"gameTitle\": \"Mega Man III\",\r\n    \"condition\": 3,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Mega_Man_3#/media/File:Megaman3_box.jpg\",\r\n    \"price\": 20,\r\n    \"description\": \"The box and manual has some minor scratches. Arguably the best of the Mega Man titles released for the NES - definitely has the best soundtrack!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Without Price (Mega Man III)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"gameTitle\": \"Mega Man III\",\r\n    \"console\": \"nes\",\r\n    \"condition\": 3,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Mega_Man_3#/media/File:Megaman3_box.jpg\",\r\n    \"description\": \"The box and manual has some minor scratches. Arguably the best of the Mega Man titles released for the NES - definitely has the best soundtrack!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Non-supported Console (Elden Ring)",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"gameTitle\": \"Elden Ring\",\r\n    \"console\": \"PlayStation 5\",\r\n    \"condition\": 4,\r\n    \"price\": 50\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Without Title",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"console\": \"SNES\",\r\n    \"condition\": 1,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Chrono_Trigger#/media/File:Chrono_Trigger.jpg\",\r\n    \"price\": 3,\r\n    \"description\": \"I spilled coffee all over the box and manual... but it's still one of the best RPG's ever made!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games",
+										"snes",
+										"chrono-trigger"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Update Without Price",
+							"request": {
+								"method": "PUT",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"gameTitle\": \"Chrono Trigger\",\r\n    \"console\": \"SNES\",\r\n    \"condition\": 1,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Chrono_Trigger#/media/File:Chrono_Trigger.jpg\",\r\n    \"description\": \"I spilled coffee all over the box and manual... but it's still one of the best RPG's ever made!\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games",
+										"snes",
+										"chrono-trigger"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Find By User No Query",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/findPostedByUser",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games",
+										"findPostedByUser"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Webhooks",
+					"item": [
+						{
+							"name": "Bad",
+							"item": [
+								{
+									"name": "Delete Non-Existent Webhook",
+									"request": {
+										"method": "DELETE",
+										"header": [],
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks/62a554584ce0140",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"webhooks",
+												"62a554584ce0140"
+											]
+										}
+									},
+									"response": []
+								}
+							]
+						},
+						{
+							"name": "Get Webhooks",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Get Webhook",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks/62b050350fef8052ec5baac4",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks",
+										"62b050350fef8052ec5baac4"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Test Webhook 0",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"on-create-game\",\r\n    \"recipientUrl\": \"http://localhost:8082/api/webhooks/hook-test-0\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Test Webhook 1",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"on-delete-game\",\r\n    \"recipientUrl\": \"http://localhost:8082/api/webhooks/hook-test-1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Test Webhook Route 0",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"on-create-game\",\r\n    \"recipientUrl\": \"www.someuriblahblahblah.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks/hook-test-0",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks",
+										"hook-test-0"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Test Webhook Route 1",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"on-create-game\",\r\n    \"recipientUrl\": \"www.someuriblahblahblah.com\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks/hook-test-1",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks",
+										"hook-test-1"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Delete Webhook",
+							"request": {
+								"method": "DELETE",
+								"header": [],
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks/62aa51039a397f4e84b22fea",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks",
+										"62aa51039a397f4e84b22fea"
+									]
+								}
+							},
+							"response": []
+						}
+					]
+				},
+				{
+					"name": "Create (Mega Man III)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameTitle\": \"Mega Man III\",\r\n    \"console\": \"NES\",\r\n    \"condition\": 3,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Mega_Man_3#/media/File:Megaman3_box.jpg\",\r\n    \"price\": 20,\r\n    \"description\": \"The box and manual has some minor scratches. Arguably the best of the Mega Man titles released for the NES - definitely has the best soundtrack!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create with Full Console Name (Mega Man III)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameTitle\": \"Mega Man III\",\r\n    \"console\": \"Nintendo Entertainment System\",\r\n    \"condition\": 3,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Mega_Man_3#/media/File:Megaman3_box.jpg\",\r\n    \"price\": 20,\r\n    \"description\": \"The box and manual has some minor scratches. Arguably the best of the Mega Man titles released for the NES - definitely has the best soundtrack!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create (Chrono Trigger)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameTitle\": \"Chrono Trigger\",\r\n    \"console\": \"SNES\",\r\n    \"condition\": 2,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Chrono_Trigger#/media/File:Chrono_Trigger.jpg\",\r\n    \"price\": 5,\r\n    \"description\": \"One of the best RPG's ever made!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create (Shenmue)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameTitle\": \"Shenmue\",\r\n    \"console\": \"Sega Dreamcast\",\r\n    \"condition\": 2,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Shenmue_(video_game)#/media/File:ShenmueDCbox.jpg\",\r\n    \"price\": 60,\r\n    \"description\": \"Amazing game\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Create (River City Ransom)",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameTitle\": \"River City Ransom\",\r\n    \"console\": \"NES\",\r\n    \"condition\": 2,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/River_City_Ransom#/media/File:River_City_Ransom-front.jpg\",\r\n    \"price\": 35,\r\n    \"description\": \"The game that taught me that whenever someone is holding a cool pre-fight speech, it's best just to run up and hit them across the face with a bicycle chain.\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get (Jet Force Gemini)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/n64/jet-force-gemini",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"n64",
+								"jet-force-gemini"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get (SNES games)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"snes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get (NES games)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/nes",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"nes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get (Mega Man III)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/nes/mega-man-iii",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"nes",
+								"mega-man-iii"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Get (Chrono Trigger)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger(1)",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"snes",
+								"chrono-trigger(1)"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Update (Chrono Trigger)",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"gameTitle\": \"Chrono Trigger\",\r\n    \"console\": \"SNES\",\r\n    \"condition\": 1,\r\n    \"imageUrl\": \"https://en.wikipedia.org/wiki/Chrono_Trigger#/media/File:Chrono_Trigger.jpg\",\r\n    \"price\": 3,\r\n    \"description\": \"I spilled coffee all over the box and manual... but it's still one of the best RPG's ever made!\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"snes",
+								"chrono-trigger"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (Mega Man III)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/nes/mega-man-iii",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"nes",
+								"mega-man-iii"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Delete (Chrono Trigger)",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"snes",
+								"chrono-trigger"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Welcome",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find All",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find By User (Stan)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/findPostedByUser?user=stan.marsh@southparkelementary.com",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"findPostedByUser"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "stan.marsh@southparkelementary.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find By User (Kyle)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/findPostedByUser?user=kyle.broflowski@southparkelementary.com",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"findPostedByUser"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "kyle.broflowski@southparkelementary.com"
+								}
+							]
+						}
+					},
+					"response": []
+				}
+			],
+			"auth": {
+				"type": "bearer",
+				"bearer": [
+					{
+						"key": "token",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtlbm55Lm1jY29ybWlja0Bzb3V0aHBhcmtlbGVtZW50YXJ5LmNvbSIsImlhdCI6MTY1NTgxNDI0MywiZXhwIjoxNjU1ODE3ODQzfQ.NuGUEjylf-tDPB7EPqjvl2dBn6OfIXqqgJxxXwlaAJ7np6zCLTYk6btn_O52MGDgo0S4ME-rr6-c0pYLfpai81Y8sBMg_hF186pnz4nyNdUu3Fx0nrV9C56OXHyMumv_ZFWEAA4jYjEBwVHQseeAn2LUVnqDOjiQwSi9zFr4gfmGnXXQtbCuZa7YUGE-URl_OhFqtnxQL6wfBoySWnC2JrGPO3EdTZgOi4INNmtA50x0duTC43JaazmZYqx72mwuY6EKTQmIErgYJR1A9mU198WlvHtfWD-1hleUEf3sEqfqVjGtx0diS9SF9mu_ya2Lr3A7WBmk6WBbhsikigajYQ",
+						"type": "string"
+					}
+				]
+			},
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"type": "text/javascript",
+						"exec": [
+							""
+						]
+					}
+				}
+			]
+		},
+		{
+			"name": "Welcome",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://cscloud8-254.lnu.se/api-games-service/api",
+					"protocol": "https",
+					"host": [
+						"cscloud8-254",
+						"lnu",
+						"se"
+					],
+					"path": [
+						"api-games-service",
+						"api"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Welcome Auth Service Redirect",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://cscloud8-254.lnu.se/api-games-service/api/auth-welcome",
+					"protocol": "https",
+					"host": [
+						"cscloud8-254",
+						"lnu",
+						"se"
+					],
+					"path": [
+						"api-games-service",
+						"api",
+						"auth-welcome"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Databases to Test Data Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "you-bastard",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://cscloud8-254.lnu.se/api-games-service/api/reset-databases-with-test-data",
+					"protocol": "https",
+					"host": [
+						"cscloud8-254",
+						"lnu",
+						"se"
+					],
+					"path": [
+						"api-games-service",
+						"api",
+						"reset-databases-with-test-data"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Reset Databases to Empty Copy",
+			"request": {
+				"auth": {
+					"type": "bearer",
+					"bearer": [
+						{
+							"key": "token",
+							"value": "you-bastard",
+							"type": "string"
+						}
+					]
+				},
+				"method": "POST",
+				"header": [],
+				"url": {
+					"raw": "https://cscloud8-254.lnu.se/api-games-service/api/reset-databases-to-empty",
+					"protocol": "https",
+					"host": [
+						"cscloud8-254",
+						"lnu",
+						"se"
+					],
+					"path": [
+						"api-games-service",
+						"api",
+						"reset-databases-to-empty"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
