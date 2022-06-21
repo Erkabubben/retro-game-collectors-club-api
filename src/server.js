@@ -51,12 +51,12 @@ const main = async () => {
     err.status = err.status || 500
 
     return res
-    .status(err.status)
-    .json({
-      status: err.status,
-      message: err.message,
-      links: req.utils.getLinks(req, {})
-    })
+      .status(err.status)
+      .json({
+        status: err.status,
+        message: err.message,
+        links: req.utils.getLinks(req, {})
+      })
   })
 
   if (process.env.RESET_DBS === 'true') {

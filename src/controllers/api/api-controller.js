@@ -101,11 +101,14 @@ export class APIController {
   }
 
   /**
-   * Gets all accepted consoles as a comma-separated string.
+   * Redirects a request, waits for the response and forwards it back to the client.
    *
-   * @returns {string} - All accepted consoles as a comma-separated string.
+   * @param {object} req - Express request object.
+   * @param {object} res - Express response object.
+   * @param {Function} next - Express next middleware function.
+   * @param {boolean} url - The URL the request should be redirected to.
    */
-   async redirectReqThenRes (req, res, next, url) {
+  async redirectReqThenRes (req, res, next, url) {
     try {
       const JSONbody = await JSON.stringify(req.body)
       const response = await fetch(url, {
@@ -130,27 +133,27 @@ export class APIController {
    * @param {Function} next - Express next middleware function.
    * @param {boolean} addTestData - Whether or not to add test data after database reset.
    */
-    async resetDatabases (req, res, next, addTestData) {
-      try {
-        // Parses the authorization header of the request
-        const authorization = req.headers.authorization?.split(' ')
-        if (authorization?.[0] !== 'Bearer') {
-          console.log('Bearer token is missing.')
-          throw new Error()
-        } else if (authorization[1] !== 'you-bastard') {
-          console.log('Wrong bearer token.')
-          throw new Error()
-        }
-        req.utils.resetDatabases(addTestData)
-        // Send response.
-        res
-          .status(200)
-          .json({
-            status: 200,
-            message: addTestData ? 'Databases were successfully reset to test data.' : 'Databases were successfully reset to empty.' 
-          })
-      } catch (error) {
-        next(error)
+  async resetDatabases (req, res, next, addTestData) {
+    try {
+      // Parses the authorization header of the request
+      const authorization = req.headers.authorization?.split(' ')
+      if (authorization?.[0] !== 'Bearer') {
+        console.log('Bearer token is missing.')
+        throw new Error()
+      } else if (authorization[1] !== 'you-bastard') {
+        console.log('Wrong bearer token.')
+        throw new Error()
       }
+      req.utils.resetDatabases(addTestData)
+      // Send response.
+      res
+        .status(200)
+        .json({
+          status: 200,
+          message: addTestData ? 'Databases were successfully reset to test data.' : 'Databases were successfully reset to empty.'
+        })
+    } catch (error) {
+      next(error)
     }
+  }
 }
