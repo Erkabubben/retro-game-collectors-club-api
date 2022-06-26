@@ -36,6 +36,4 @@ router.post('/', auth.authenticateJWT, (req, res, next) => controller.create(req
 
 router.put('/:console/:id', auth.authenticateJWT, auth.ensureUserIsGameOwner, (req, res, next) => controller.update(req, res, next))
 
-router.patch('/:console/:id', auth.authenticateJWT, auth.ensureUserIsGameOwner, (req, res, next) => controller.partialUpdate(req, res, next))
-
 router.delete('/:console/:id', auth.authenticateJWT, auth.ensureUserIsGameOwner, (req, res, next) => controller.delete(req, res, next))

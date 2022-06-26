@@ -92,8 +92,8 @@ export class GamesController {
     try {
       const games = await Game.find({})
       const gameObjects = []
-      games.forEach(image => {
-        gameObjects.push(this.ObjectFromGameModel(req, image))
+      games.forEach(game => {
+        gameObjects.push(this.ObjectFromGameModel(req, game))
       })
       const message = gameObjects.length > 0 ? 'There are a total of ' + gameObjects.length + ' game ads posted.' : 'There are currently no game ads posted.'
       res.status(200)

@@ -92,6 +92,8 @@ export class APIController {
       // Save user if Auth service response is OK.
       if (responseJSON.status === 200 || responseJSON.status === 201) {
         await user.save()
+        responseJSON.links = req.utils.getLinks(req, {})
+        delete responseJSON.id
         res.json(responseJSON)
         res.status(responseJSON.status)
       }
@@ -117,6 +119,7 @@ export class APIController {
         body: req.method === 'GET' ? undefined : JSONbody
       })
       const responseJSON = await response.json()
+      responseJSON.links = req.utils.getLinks(req, {})
       res
         .status(response.status)
         .json(responseJSON)

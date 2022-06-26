@@ -99,8 +99,7 @@ export class WebhooksController {
   }
 
   /**
-   * Creates a new image with metadata, based on the form content. The image
-   * is stored in the Image Service, the metadata in the Resource Service database.
+   * Creates a new Webhook for the specified event type and recipient URL.
    *
    * @param {object} req - Express request object.
    * @param {object} res - Express response object.
@@ -115,6 +114,15 @@ export class WebhooksController {
         res.json({
           status: 500,
           message: 'Required fields \'type\' and \'recipientUrl\' are missing.',
+          links: req.utils.getLinks(req, {})
+        })
+        return
+      }
+      if (!(req.body.type === 'on-create-game' || req.body.type === 'on-delete-game' || req.body.type === 'on-update-game')) {
+        res.status(500)
+        res.json({
+          status: 500,
+          message: 'Webhook event type must be one of the following: on-create-game, on-delete-game, on-update-game',
           links: req.utils.getLinks(req, {})
         })
         return
