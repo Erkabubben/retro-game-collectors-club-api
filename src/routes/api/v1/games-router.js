@@ -18,7 +18,7 @@ const auth = new Authentication()
 
 // Map HTTP verbs and route paths to controller actions.
 
-router.get('/findPostedByUser', auth.authenticateJWT, (req, res, next) => controller.findPostedByUser(req, res, next))
+router.post('/find-posted-by', auth.authenticateJWT, (req, res, next) => controller.findPostedByUser(req, res, next))
 
 router.param('console', (req, res, next, id) => controller.loadConsole(req, res, next, id))
 

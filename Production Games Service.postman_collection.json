@@ -578,7 +578,7 @@
 									}
 								},
 								"url": {
-									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger(1)",
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/snes/chrono-trigger",
 									"protocol": "https",
 									"host": [
 										"cscloud8-254",
@@ -590,7 +590,7 @@
 										"api",
 										"games",
 										"snes",
-										"chrono-trigger(1)"
+										"chrono-trigger"
 									]
 								}
 							},
@@ -832,6 +832,30 @@
 								}
 							},
 							"response": []
+						},
+						{
+							"name": "Get Non-existing Game",
+							"request": {
+								"method": "GET",
+								"header": [],
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/n64/diddy-kong-racing",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"games",
+										"n64",
+										"diddy-kong-racing"
+									]
+								}
+							},
+							"response": []
 						}
 					]
 				},
@@ -859,6 +883,60 @@
 												"api",
 												"webhooks",
 												"62a554584ce0140"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Create Non-Supported Webhook Type",
+									"request": {
+										"method": "POST",
+										"header": [],
+										"body": {
+											"mode": "raw",
+											"raw": "{\r\n    \"type\": \"on-request-game\",\r\n    \"recipientUrl\": \"http://localhost:8082/api/webhooks/hook-test-1\"\r\n}",
+											"options": {
+												"raw": {
+													"language": "json"
+												}
+											}
+										},
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"webhooks"
+											]
+										}
+									},
+									"response": []
+								},
+								{
+									"name": "Get Webhook With Invalid Id",
+									"request": {
+										"method": "GET",
+										"header": [],
+										"url": {
+											"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks/62b050350fef8052ec5baac4",
+											"protocol": "https",
+											"host": [
+												"cscloud8-254",
+												"lnu",
+												"se"
+											],
+											"path": [
+												"api-games-service",
+												"api",
+												"webhooks",
+												"62b050350fef8052ec5baac4"
 											]
 										}
 									},
@@ -912,7 +990,7 @@
 							"response": []
 						},
 						{
-							"name": "Create Test Webhook 0",
+							"name": "Create Webhook on-create",
 							"request": {
 								"method": "POST",
 								"header": [],
@@ -943,13 +1021,44 @@
 							"response": []
 						},
 						{
-							"name": "Create Test Webhook 1",
+							"name": "Create Webhook on-delete",
 							"request": {
 								"method": "POST",
 								"header": [],
 								"body": {
 									"mode": "raw",
 									"raw": "{\r\n    \"type\": \"on-delete-game\",\r\n    \"recipientUrl\": \"http://localhost:8082/api/webhooks/hook-test-1\"\r\n}",
+									"options": {
+										"raw": {
+											"language": "json"
+										}
+									}
+								},
+								"url": {
+									"raw": "https://cscloud8-254.lnu.se/api-games-service/api/webhooks",
+									"protocol": "https",
+									"host": [
+										"cscloud8-254",
+										"lnu",
+										"se"
+									],
+									"path": [
+										"api-games-service",
+										"api",
+										"webhooks"
+									]
+								}
+							},
+							"response": []
+						},
+						{
+							"name": "Create Webhook on-update",
+							"request": {
+								"method": "POST",
+								"header": [],
+								"body": {
+									"mode": "raw",
+									"raw": "{\r\n    \"type\": \"on-update-game\",\r\n    \"recipientUrl\": \"http://localhost:8082/api/webhooks/hook-test-1\"\r\n}",
 									"options": {
 										"raw": {
 											"language": "json"
@@ -1465,7 +1574,7 @@
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/findPostedByUser?user=stan.marsh@southparkelementary.com",
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/find-posted-by?user=stan.marsh@southparkelementary.com",
 							"protocol": "https",
 							"host": [
 								"cscloud8-254",
@@ -1476,7 +1585,7 @@
 								"api-games-service",
 								"api",
 								"games",
-								"findPostedByUser"
+								"find-posted-by"
 							],
 							"query": [
 								{
@@ -1489,12 +1598,12 @@
 					"response": []
 				},
 				{
-					"name": "Find By User (Kyle)",
+					"name": "Find By User (Kenny)",
 					"request": {
 						"method": "GET",
 						"header": [],
 						"url": {
-							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/findPostedByUser?user=kyle.broflowski@southparkelementary.com",
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/find-posted-by?user=kenny.mccormick@southparkelementary.com",
 							"protocol": "https",
 							"host": [
 								"cscloud8-254",
@@ -1505,7 +1614,36 @@
 								"api-games-service",
 								"api",
 								"games",
-								"findPostedByUser"
+								"find-posted-by"
+							],
+							"query": [
+								{
+									"key": "user",
+									"value": "kenny.mccormick@southparkelementary.com"
+								}
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Find By User (Kyle)",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/find-posted-by?user=kyle.broflowski@southparkelementary.com",
+							"protocol": "https",
+							"host": [
+								"cscloud8-254",
+								"lnu",
+								"se"
+							],
+							"path": [
+								"api-games-service",
+								"api",
+								"games",
+								"find-posted-by"
 							],
 							"query": [
 								{
@@ -1523,7 +1661,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtlbm55Lm1jY29ybWlja0Bzb3V0aHBhcmtlbGVtZW50YXJ5LmNvbSIsImlhdCI6MTY1NTgxNDI0MywiZXhwIjoxNjU1ODE3ODQzfQ.NuGUEjylf-tDPB7EPqjvl2dBn6OfIXqqgJxxXwlaAJ7np6zCLTYk6btn_O52MGDgo0S4ME-rr6-c0pYLfpai81Y8sBMg_hF186pnz4nyNdUu3Fx0nrV9C56OXHyMumv_ZFWEAA4jYjEBwVHQseeAn2LUVnqDOjiQwSi9zFr4gfmGnXXQtbCuZa7YUGE-URl_OhFqtnxQL6wfBoySWnC2JrGPO3EdTZgOi4INNmtA50x0duTC43JaazmZYqx72mwuY6EKTQmIErgYJR1A9mU198WlvHtfWD-1hleUEf3sEqfqVjGtx0diS9SF9mu_ya2Lr3A7WBmk6WBbhsikigajYQ",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtlbm55Lm1jY29ybWlja0Bzb3V0aHBhcmtlbGVtZW50YXJ5LmNvbSIsImlhdCI6MTY1NjI1ODg2MywiZXhwIjoxNjU2MjYyNDYzfQ.krqfpnJFk-16kNMHsBvgAn2WaTlCbyNU4X0Hpx5Sr_WG7ZRppEqvB9MtA5x_L8Rj4WmoqyRk0_PYKPauAYMpRRTcRZTcYkL-UanIDwG1O0bNSKcZ3y4Vq9bVn8muMX7XfLlG4SLbKZqZS8LSg78iEdNlxdbB4HQMybAOlQXdAHcbMtLvj8MacoIEX10-29-kR5i0FX9nNeTE6hwJfnNaa1t98IB9DCqxWhzKrJ9wNsGiKtSNsOrElxjm2iYRbf1g54vRtE-SspN4DzsS-5lOFQgMXGzmzNxWE5_4w8ep_Wy3_YhSe6JSFqDBllyGXu0zP0JynVlON9e_C-xJPuw5FQ",
 						"type": "string"
 					}
 				]
@@ -1593,7 +1731,7 @@
 			"response": []
 		},
 		{
-			"name": "Reset Databases to Test Data Copy",
+			"name": "Reset Databases to Test Data",
 			"request": {
 				"auth": {
 					"type": "bearer",
@@ -1625,7 +1763,7 @@
 			"response": []
 		},
 		{
-			"name": "Reset Databases to Empty Copy",
+			"name": "Reset Databases to Empty",
 			"request": {
 				"auth": {
 					"type": "bearer",

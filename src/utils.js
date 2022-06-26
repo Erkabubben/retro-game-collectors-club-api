@@ -90,8 +90,8 @@ export class Utils {
       globalLinks.login = 'login'
       globalLinks.register = 'register'
     } else {
-      globalLinks.myPostedGames = 'games/' + 'findPostedByUser?user=' + req.user.email
-      globalLinks.gamesPostedByUser = 'games/findPostedByUser?user={user}'
+      globalLinks.myPostedGames = 'games/' + 'find-posted-by?user=' + req.user.email
+      globalLinks.gamesPostedByUser = 'games/find-posted-by?user={user}'
       globalLinks.currentlyPostedGames = 'games'
       globalLinks.currentlyPostedGamesForConsole = 'games/{console}'
       globalLinks.webhooks = 'webhooks'
