@@ -1571,7 +1571,7 @@
 				{
 					"name": "Find By User (Stan)",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/find-posted-by?user=stan.marsh@southparkelementary.com",
@@ -1600,7 +1600,7 @@
 				{
 					"name": "Find By User (Kenny)",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/find-posted-by?user=kenny.mccormick@southparkelementary.com",
@@ -1629,7 +1629,7 @@
 				{
 					"name": "Find By User (Kyle)",
 					"request": {
-						"method": "GET",
+						"method": "POST",
 						"header": [],
 						"url": {
 							"raw": "https://cscloud8-254.lnu.se/api-games-service/api/games/find-posted-by?user=kyle.broflowski@southparkelementary.com",
@@ -1661,7 +1661,7 @@
 				"bearer": [
 					{
 						"key": "token",
-						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtlbm55Lm1jY29ybWlja0Bzb3V0aHBhcmtlbGVtZW50YXJ5LmNvbSIsImlhdCI6MTY1NjI1ODg2MywiZXhwIjoxNjU2MjYyNDYzfQ.krqfpnJFk-16kNMHsBvgAn2WaTlCbyNU4X0Hpx5Sr_WG7ZRppEqvB9MtA5x_L8Rj4WmoqyRk0_PYKPauAYMpRRTcRZTcYkL-UanIDwG1O0bNSKcZ3y4Vq9bVn8muMX7XfLlG4SLbKZqZS8LSg78iEdNlxdbB4HQMybAOlQXdAHcbMtLvj8MacoIEX10-29-kR5i0FX9nNeTE6hwJfnNaa1t98IB9DCqxWhzKrJ9wNsGiKtSNsOrElxjm2iYRbf1g54vRtE-SspN4DzsS-5lOFQgMXGzmzNxWE5_4w8ep_Wy3_YhSe6JSFqDBllyGXu0zP0JynVlON9e_C-xJPuw5FQ",
+						"value": "eyJhbGciOiJSUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Imtlbm55Lm1jY29ybWlja0Bzb3V0aHBhcmtlbGVtZW50YXJ5LmNvbSIsImlhdCI6MTY1NjI2NTY0NSwiZXhwIjoxNjU2MjY5MjQ1fQ.hZLNFCcwSbk8lEdNXodDTTEpdg8mai-Ju8a9oc4dcBaecP8U2UNiA2aLDqkO6InnmHkWwZARPeucNgdzS8z1WNrpXahP9uIUWZAY3_DGfhXocdPQobZrYfYhOVvNYlOMQ83zRSNRJHB-tCaXIsKNkwJjUVYORmcJ5thj0py0pMSFgDtn6PDoYAxfVEMIAhb7Ij-ahCZQvpdxLUBwu50_TLu_-NdKYSg7wzpNixt2f4mefGxQRKbOuNpti4lLGU91i6Yyh7DYmlmBuZXojIvxNqRzgObka3TszjjjDHhnnCztblYdSf9iPBeWvRl5cjoCqPiB8XNJOwHjwaopFMGVBA",
 						"type": "string"
 					}
 				]

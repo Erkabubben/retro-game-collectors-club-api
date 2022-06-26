@@ -1,0 +1,353 @@
+GET /
+	Returns a Welcome message.
+
+POST /register
+	Registers a new user account on the Games Service.
+		Parameters
+			Name: body
+				Type: object
+				Description: Message body containing the username and password for the new user.
+				Example:
+				{
+					"email": "stan.marsh@southparkelementary.com",
+					"password": "ManBearPig"
+				}
+		Responses
+			Code: 201
+				Description: Successful operation.
+				Example:
+				{
+					"status": 201,
+					"message": "Account created",
+					"links": {<links>}
+				}
+			Code: 409
+				Description: A user account is already registered on the provided Email address.
+			Code: 400
+				Description: The suggested has provided a password that is either too short or too long (must be at least 10 and no more than 1000 characters).
+
+POST /login
+	Logs a user into the Games Service.
+		Parameters
+			Name: body
+				Type: object
+				Description: Message body containing the username and password.
+				Example:
+				{
+					"email": "stan.marsh@southparkelementary.com",
+					"password": "ManBearPig"
+				}
+		Responses
+			Code: 201
+				Description: Successful operation.
+				Example:
+				{
+					"status": 200,
+					"message": "User logged in successfully",
+					"access_token": <access token>,
+					"links": {<links>}
+				}
+			Code: 409
+				Description: Invalid credentials.
+			Code: 500
+				Description: Username or password has not been provided.
+
+games
+	Ads for retro games for sale posted on the service. Only accessible for authenticated users. Game ads are categorized by the abbreviated console name. If there are multiple ads for the same game, a number within a parenthesis is added to the URI to make each ad identifiable.
+	Example: If a user creates an ad for the SNES game Chrono Trigger, the URI will be "snes/chrono-trigger". If another user creates two new ads for the same game, their URIs will be "snes/chrono-trigger(1)" and "snes/chrono-trigger(2)".
+
+	GET /games
+		Returns all current game ads on the service. Requires user authentication.
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"message": "There are a total of 12 game ads posted.",
+						"status": 200,
+						"links": {<links>},
+						"resources": [<resources>]
+					}
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	POST /games
+		Creates a new ad for a game for sale by the user. Requires user authentication.
+			Parameters
+				Name: body
+					Type: object
+					Description: Message body containing the title, console and other information that should be included in the ad. gameTitle, console, condition and price are required - other properties are optional. The condition rating should be a number between 1 and 5, and the console needs to be one of the following: nes, snes, gb, gbc, gba, md, n64, ps, ps2, dc, pc.
+					Example:
+					{
+						"gameTitle": "Mega Man III",
+						"console": "nes",
+						"condition": 3,
+						"imageUrl": "https://en.wikipedia.org/wiki/Mega_Man_3#/media/File:Megaman3_box.jpg",
+						"price": 20,
+						"description": "The box and manual has some minor scratches. Arguably the best of the Mega Man titles released for the NES - definitely has the best soundtrack!"
+					}
+			Responses
+				Code: 201
+					Description: Successful operation.
+					Example:
+					{
+						"message": "A new game ad was posted.",
+						"status": 201,
+						"links": {<links>},
+						"resource": {<resource>}
+					}
+				Code: 500
+					Description: Required fields 'gameTitle' or 'console' is missing, or the console provided is not supported.
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	GET /games/find-posted-by
+		Returns all current game ads on the service posted by a specific user. Username needs to be provided as 'user' parameter in the query string. Requires user authentication.
+			Parameters
+				Name: user
+					Type: string
+					Description: The username of the user whose game ads you want returned.
+					Example: games/find-posted-by?user=kyle.broflowski@southparkelementary.com
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"message": "There are a total of 4 game ads posted by kyle.broflowski@southparkelementary.com.",
+						"status": 200,
+						"links": {<links>},
+						"resources": [<resources>]
+					}
+				Code: 400
+					Description: 'user' parameter is missing in query.
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	GET /games/{console}
+		Returns all currently posted games for the specified console. Requires user authentication.
+			Parameters
+				Name: console
+					Type: string
+					Description: The name of the console. Should be abbreviated and lower-case: "nes" (not "NES" or "Nintendo Entertainment System).
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"message": "There are a total of 5 game ads for the nes posted.",
+						"status": 200,
+						"links": {<links>},
+						"resources": [<resources>]
+					}
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	GET /games/{console}/{gameId}
+		Returns a specific game ad.
+			Parameters
+				Name: console
+					Type: string
+					Description: The name of the console. Should be abbreviated and lower-case: "nes" (not "NES" or "Nintendo Entertainment System).
+				Name: gameId
+					Type: string
+					Description: The game Id provided when posting the game ad. Always lower-case and using dashes to separate words. A number within parenthesis is added to the end if there are multiple ads for the same game: mega-man-iii(2)
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"status": 200,
+						"resource": {
+							"gameTitle": "Jet Force Gemini",
+							"console": "n64",
+							"condition": 3,
+							"imageUrl": "https://en.wikipedia.org/wiki/Jet_Force_Gemini#/media/File:Jet_Force_Gemini_box.jpg",
+							"price": 40,
+							"owner": "kyle.broflowski@southparkelementary.com",
+							"createdAt": "2022-06-26T08:54:29.478Z",
+							"href": "http://localhost:8082/api/games/n64/jet-force-gemini"
+						},
+						"links": {<links>}
+					}
+				Code: 404
+					Description: Game with Id not found.
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	PUT /games/{console}/{gameId}
+		Updates a game ad. Requires user authentication and can only be used on game ads owned by the authenticated user. A new URI for the updated game ad will be included in the response.
+			Parameters
+				Name: console
+					Type: string
+					Description: The name of the console. Should be abbreviated and lower-case: "nes" (not "NES" or "Nintendo Entertainment System).
+				Name: gameId
+					Type: string
+					Description: The game Id provided when posting the game ad. Always lower-case and using dashes to separate words. A number within parenthesis is added to the end if there are multiple ads for the same game: mega-man-iii(2)
+			Parameters
+				Name: body
+					Type: object
+					Description: Message body containing the title, console and other information that should be included in the updated ad. gameTitle, console, condition and price are required - other properties are optional. The condition rating should be a number between 1 and 5, and the console needs to be one of the following: nes, snes, gb, gbc, gba, md, n64, ps, ps2, dc, pc.
+					Example:
+					{
+						"gameTitle": "Chrono Trigger",
+						"console": "SNES",
+						"condition": 1,
+						"imageUrl": "https://en.wikipedia.org/wiki/Chrono_Trigger#/media/File:Chrono_Trigger.jpg",
+						"price": 3,
+						"description": "I spilled coffee all over the box and manual... but it's still one of the best RPG's ever made!"
+					}
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"status": 200,
+						"message": "Your ad for Chrono Trigger was updated.",
+						"links": {<links>},
+						"resource": {
+							"gameTitle": "Chrono Trigger",
+							"console": "snes",
+							"condition": 1,
+							"imageUrl": "https://en.wikipedia.org/wiki/Chrono_Trigger#/media/File:Chrono_Trigger.jpg",
+							"price": 3,
+							"description": "I spilled coffee all over the box and manual... but it's still one of the best RPG's ever made!",
+							"owner": "kenny.mccormick@southparkelementary.com",
+							"createdAt": "2022-06-26T09:43:05.689Z",
+							"href": "http://localhost:8082/api/games/snes/chrono-trigger"
+						}
+					}
+				Code: 500
+					Description: Required fields 'gameTitle' or 'console' is missing, or the console provided is not supported.
+				Code: 404
+					Description: Game with Id not found.
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	DELETE /games/{console}/{gameId}
+		Deletes a game ad. Requires user authentication and can only be used on game ads owned by the authenticated user.
+			Parameters
+				Name: console
+					Type: string
+					Description: The name of the console. Should be abbreviated and lower-case: "nes" (not "NES" or "Nintendo Entertainment System).
+				Name: gameId
+					Type: string
+					Description: The game Id provided when posting the game ad. Always lower-case and using dashes to separate words. A number within parenthesis is added to the end if there are multiple ads for the same game: mega-man-iii(2)
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"status": 200,
+						"message": "Your ad for Chrono Trigger was deleted.",
+						"links": {<links>}
+					}
+				Code: 404
+					Description: Game with Id not found.
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+webhooks
+	Webhooks registered by the authenticated user. Webhooks are always sent by POST request to the specified recipient URIs. Webhooks can be registered on the following events:
+	"on-create-game" - Triggered whenever a user posts a new game ad to the service.
+	"on-delete-game" - Triggered whenever a game ad is deleted from the service.
+	"on-update-game" - Triggered whenever a user updates an existing game ad.
+
+	GET /webhooks
+		Returns all Webhooks registered by the authenticated user.
+
+	POST /webhooks
+		Creates a new Webhook for the specified event type and recipient URL. Requires user authentication.
+			Parameters
+				Name: body
+					Type: object
+					Description: Message body containing the event type and recipient URL for the Webhook. Type should be one of the events specified above ("on-create-game", "on-delete-game" or "on-update-game"). In the example, somerecipienturl.com will receive a POST request with the new game ad the next time a user posts a new ad to the service.
+					Example:
+					{
+						"type": "on-create-game",
+						"recipientUrl": "http://www.somerecipienturl.com"
+					}
+			Responses
+				Code: 201
+					Description: Successful operation.
+					Example:
+					{
+						"message": "A new Webhook was registered.",
+						"status": 201,
+						"resource": {
+							"type": "on-create-game",
+							"recipientUrl": "http://localhost:8082/api/webhooks/hook-test-0",
+							"owner": "stan.marsh@southparkelementary.com",
+							"href": "http://localhost:8082/api/webhooks/62b82c40e5eba831dc4ea5f8"
+						},
+						"links": {<links>}
+					}
+				Code: 500
+					Description: User has not provided type and recipientUrl, or user has tried to register a Webhook for a non-supported type.
+				Code: 409
+					Description: User has already registered the exact same Webhook (duplicates are not allowed).
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	GET /webhooks/{webhookId}
+		Returns a specific Webhook registered by the authenticated user.
+			Parameters
+				Name: webhookId
+					Type: string
+					Description: The unique Id of the Webhook.
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"status": 200,
+						"resource": {
+							"type": "on-create-game",
+							"recipientUrl": "http://localhost:8082/api/webhooks/hook-test-0",
+							"owner": "stan.marsh@southparkelementary.com",
+							"createdAt": "2022-06-26T10:00:36.591Z",
+							"href": "http://localhost:8082/api/webhooks/62b82e44e5eba831dc4ea5fa"
+						},
+						"links": {<links>}
+					}
+				Code: 404
+					Description: Webhook with Id not found.
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+	DELETE /webhooks/{webhookId}
+		Deletes a registered Webhook. Requires user authentication and can only be used on Webhooks owned by the authenticated user.
+			Parameters
+				Name: webhookId
+					Type: string
+					Description: The unique Id of the Webhook.
+			Responses
+				Code: 200
+					Description: Successful operation.
+					Example:
+					{
+						"status": 200,
+						"message": "Your Webhook registered for URL http://localhost:8082/api/webhooks/hook-test-0 on event type on-create-game was deleted.",
+						"links": {<links>}
+					}
+				Code: 404
+					Description: Webhook with Id not found.
+				Code: 401, 403
+					Description: User is not authenticated (Bearer token is missing or invalid).
+
+development
+	The following paths are only included for development and testing purposes. They should be disabled before making the service publicly available.
+
+	GET /auth-welcome
+		Returns a Welcome message from the Auth Service if it is online and accessible.
+
+	POST /reset-databases-with-test-data
+		Resets all databases  both within the Games Service and Auth Servic, and then adds the initial test data. A Bearer Token with the string "you-bastard" needs to be included with the request. Important: Only included to simplify testing during development - should be disabled for security reasons before making the service publicly available.
+
+	POST /reset-databases-to-empty
+		Resets all databases, both within the Games Service and Auth Service. A Bearer Token with the string "you-bastard" needs to be included with the request. Important: Only included to simplify testing during development - should be disabled for security reasons before making the service publicly available.
+
+	POST /webhooks/hook-test-0
+		Route intended to be used as a recipientUrl for testing Webhooks during development.
+
+	POST /webhooks/hook-test-1
+		Another route intended to be used as a recipientUrl for testing Webhooks during development.

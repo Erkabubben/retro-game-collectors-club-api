@@ -1,3 +1,24 @@
+# The LNU Retro Game Collectors Club API
+The LNU Retro Game Collectors Club is a growing online community for retro video game aficionados. They are in need of a web solution that allows their members to post and view ads for video games for sale. Inspired by the LNU Fishing Club's newly launched API, they have decided to follow the same process of first building an API and then possibly add a client application in the future.
+
+## Description
+The API allows users to register and log on. Authenticated users can create, update and delete ads for games for a limited number of supported consoles. Posted ads can be viewed by any authenticated user. Aside from requesting all current ads or just a single specific ad, a user can also request ads for games for a certain console only, or ads posted by a specific user.
+A user can also register Webhooks to be triggered whenever a game ad is created, deleted or updated.
+
+## Testing instructions
+The API is available at https://cscloud8-254.lnu.se/api-games-service/api. The documentation can be found [here](./Lindholm_API_Documentation.txt).
+### Welcome-message, registering and logging on
+Open the included collection "Production Games Service.postman_collection.json" in Postman. Go to the bottom and send the request named "POST Reset Databases to Test Data" - this will reset all databases and add some initial test data.<br>
+You can now use the "GET Welcome"-request to display the Welcome-message at the API's entry point. Proceed to the Login / Register folder and register one of the accounts. Error messages can be tested by using the requests in the folder named "Bad". If you want to log on without registering a new account, use "POST Login (Kenny)" to access Kenny McCormick's account which is included in the test data.<br>
+After getting a successful log on response, copy the access token, click the Authenticated Requests folder, and paste the access token into the Token field. Hit Save in the upper left corner.<br>
+You should now be authenticated and you can proceed to test API functionality by sending the requests within the Authenticated Requests folder. If you start by sending the "GET Welcome" contained in the folder, you'll notice that the response message has changed and that there's a different set of links included.
+### Webhooks
+If you want to test the Webhooks, first proceed to the Webhooks folder. The error handling requests in the Bad-folder should work either way, but in order to use the "GET Get Webhook" and "DELETE Delete Webhook" requests, you need to start by using "POST Create Webhook on-create/on-delete/on-update". After creating a Webhook, copy the webhookId from the end of resource/href in the response, and replace the Id at the end of the URI of the request you want to test.
+### Games
+Now, proceed to the other requests within the Authenticated Requests folder. If you have set up all three types of Webhooks, you should receive POST requests to your recipientUrl:s as you test the POST, PUT and DELETE requests in the folder.<br>
+First, create a few ads for Mega Man III and Chrono Trigger, and delete and update them using the PUT and DELETE requests. Use the GET-requests to retrieve all posted games, games posted for the NES or SNES, and games posted by yourself and other users. Create a new ad for Chrono Trigger if you have deleted your first, then proceed to test error handling by sending the requests in the "Bad" folder.
+
+<!--
 # API design assignment
 
 In this assignment, you will implement a web API following the theory of REST. We encourage you to have your own ideas about the API service to build. Maybe you have some idea you want to start with through an API-driven design? For those of you without any ideas, we present a scenario below. That will also give a hint of the extent of this assignment.
@@ -104,3 +125,4 @@ You can continue to push to the main branch, and those commits will be added to 
 You can edit the MR, and the assignment report after the MR is opened.
 
 You can add comments to your MR if you want to communicate anything to the examiner.
+-->
